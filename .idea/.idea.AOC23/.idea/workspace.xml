@@ -8,9 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AOC23/Day2/CubeGame.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AOC23/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

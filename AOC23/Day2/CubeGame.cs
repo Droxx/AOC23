@@ -21,12 +21,17 @@ public class CubeGame
             var gameStr = line.Substring(line.IndexOf(": ", StringComparison.Ordinal));
 
             var rounds = gameStr.Split(";");
+            
+            var redMin = 0;
+            var blueMin = 0;
+            var greenMin = 0;
 
             foreach (var round in rounds)
             {
                 var redCount = 0;
                 var blueCount = 0;
                 var greenCount = 0;
+
                 
                 var hand = round.Substring(1).Split(", ");
                 foreach (var handful in hand.Select(h => h.Trim()))
@@ -39,26 +44,41 @@ public class CubeGame
                     {
                         case "red":
                             redCount += count;
+                            if (redMin < redCount)
+                            {
+                                redMin = redCount;
+                            }
                             break;
                         case "green":
                             greenCount += count;
+                            if (greenMin < greenCount)
+                            {
+                                greenMin = greenCount;
+                            }
                             break;
                         case "blue":
                             blueCount += count;
+                            if (blueMin < blueCount)
+                            {
+                                blueMin = blueCount;
+                            }
                             break;
                     }
                 }
 
                 if (redCount > red || blueCount > blue || greenCount > green)
                 {
-                    possible = false;
-                    break;
+                    //possible = false;
+                    //break;
                 }
             }
 
+            var power = redMin * blueMin * greenMin;
+            total += power;
+
             if (possible)
             {
-                total += gameNumber;
+                //total += gameNumber;
             }
         }
 
