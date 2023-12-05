@@ -2,6 +2,7 @@
 
 using AOC23.Day1;
 using AOC23.Day2;
+using AOC23.Day3;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -46,6 +47,22 @@ if (int.TryParse(dayStr, out var day))
             var blue = Console.ReadLine();
             var gameOb = new CubeGame(gameInput);
             Console.WriteLine(gameOb.Play(int.Parse(red), int.Parse(blue), int.Parse(green)));
+            break;
+        case 3:
+            Console.WriteLine("Please enter engine input, followed by an empty line to continue");
+            string engInput = "";
+            while (true)
+            {
+                var line = Console.ReadLine();
+                if (line == "")
+                {
+                    break;
+                }
+                engInput += line + "\n";
+            }
+
+            var en = new Engine();
+            Console.WriteLine(en.SumSchematic(engInput));
             break;
         default:
             Console.WriteLine("Day not implemented");
