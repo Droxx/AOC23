@@ -52,6 +52,25 @@ public class SeedMapper
     {
         var regex = new Regex(@"seeds:\s([\d+ ]+)");
         var matches = regex.Matches(input);
+        var seedList = matches[0].Groups[1].Value.Split(" ").Where(n => long.TryParse(n, out var p)).Select(n => long.Parse(n)).ToList();
+        for(int i = 0; i < seedList.Count; i++)
+        {
+            var start = seedList[i];
+            var count = seedList[i + 1];
+            
+            for(int c = 0; c < count; c++)
+            {
+                _seeds.Add(start + c);
+            }
+
+            i++;
+        }
+    }
+    
+    private void GetSeedsLegacy(string input)
+    {
+        var regex = new Regex(@"seeds:\s([\d+ ]+)");
+        var matches = regex.Matches(input);
         _seeds = matches[0].Groups[1].Value.Split(" ").Where(n => long.TryParse(n, out var p)).Select(n => long.Parse(n)).ToList();
     }
 
