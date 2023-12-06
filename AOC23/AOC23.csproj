@@ -7,4 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="Day4\inputb.txt" />
+      <None Remove="Day4\inputa.txt" />
+    </ItemGroup>
+
 </Project>

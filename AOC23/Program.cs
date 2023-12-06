@@ -3,6 +3,7 @@
 using AOC23.Day1;
 using AOC23.Day2;
 using AOC23.Day3;
+using AOC23.Day4;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -63,6 +64,21 @@ if (int.TryParse(dayStr, out var day))
 
             var en = new Engine();
             Console.WriteLine(en.SumSchematic(engInput));
+            break;
+        case 4:
+            Console.WriteLine("Give input");
+            string scInput = "";
+            while (true)
+            {
+                var line = Console.ReadLine();
+                if (line == "")
+                {
+                    break;
+                }
+                scInput += line + "\n";
+            }
+            var sc = new Scratchcards();
+            Console.WriteLine(sc.CalculateWinnings(scInput));
             break;
         default:
             Console.WriteLine("Day not implemented");
