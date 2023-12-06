@@ -7,9 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 5.5">
-      <change afterPath="$PROJECT_DIR$/AOC23/Day6/BoatRace.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AOC23/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Program.cs" afterDir="false" />
+    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 6 input parsed">
+      <change beforePath="$PROJECT_DIR$/AOC23/Day6/BoatRace.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Day6/BoatRace.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701877181102</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="day 6 input parsed">
+      <option name="closed" value="true" />
+      <created>1701878442749</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1701878442749</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,7 +216,8 @@
     <MESSAGE value="day 5 fast" />
     <MESSAGE value="day 5.5 but too slow again" />
     <MESSAGE value="day 5.5" />
-    <option name="LAST_COMMIT_MESSAGE" value="day 5.5" />
+    <MESSAGE value="day 6 input parsed" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 6 input parsed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -219,19 +227,6 @@
           <line>59</line>
           <properties documentPath="C:\Projects\AOC23\AOC23\Day1\CalibrationValues.cs" initialLine="59" containingFunctionPresentation="Method 'GetTotal'" />
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/AOC23/Day6/BoatRace.cs</url>
-          <line>10</line>
-          <properties documentPath="C:\Projects\AOC23\AOC23\Day6\BoatRace.cs" initialLine="10" containingFunctionPresentation="Method 'WinOptionsMult'">
-            <startOffsets>
-              <option value="199" />
-            </startOffsets>
-            <endOffsets>
-              <option value="217" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
