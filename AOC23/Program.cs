@@ -6,6 +6,7 @@ using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
 using AOC23.Day5;
+using AOC23.Day6;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -41,6 +42,10 @@ if (int.TryParse(dayStr, out var day))
         case 5:
             var seedMapper = new SeedMapper();
             Console.WriteLine(seedMapper.GetClosestSeed(InputGrabber.GetInput("x")));
+            break;
+        case 6:
+            var boatRate = new BoatRace();
+            Console.WriteLine(boatRate.WinOptionsMult(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
