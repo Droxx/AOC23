@@ -27,8 +27,25 @@ public class SeedMapper
         GetMapping("light-to-temperature map:", lines, _lightToTemp);
         GetMapping("temperature-to-humidity map:", lines, _tempToHumidity);
         GetMapping("humidity-to-location map:", lines, _humidityToLocation);
-        
-        return 0;
+
+        long? currentClosestSeed = null;
+        foreach (var seed in _seeds)
+        {
+            var soil = _seedToSoil.GetDest(seed);
+            var fertilizer = _soilToFertilizer.GetDest(soil);
+            var water = _fertilizerToWater.GetDest(fertilizer);
+            var light = _waterToLight.GetDest(water);
+            var temp = _lightToTemp.GetDest(light);
+            var humidity = _tempToHumidity.GetDest(temp);
+            var location = _humidityToLocation.GetDest(humidity);
+
+            if (currentClosestSeed == null || location < currentClosestSeed)
+            {
+                currentClosestSeed = location;
+            }
+        }
+
+        return currentClosestSeed ?? 0;
     }
 
     private void GetSeeds(string input)

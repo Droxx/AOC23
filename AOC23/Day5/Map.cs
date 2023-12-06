@@ -2,25 +2,55 @@
 
 public class Map
 {
-    private Dictionary<long, long> _map = new();
+    private List<Range> _ranges = new();
 
     public void AddMapping(long destStart, long sourceStart, long range)
     {
-        long count = 0;
-        for(long i = sourceStart; i < sourceStart + range; i++)
-        {
-            _map.Add(i, destStart + count);
-            count++;
-        }
+        _ranges.Add(new Range(sourceStart, sourceStart + range, destStart, destStart + range));
     }
     
     public long GetDest(long source)
     {
-        if (_map.TryGetValue(source, out var dest))
+        var validRange = _ranges.FirstOrDefault(r => r.IsInRange(source));
+        if (validRange != null)
         {
-            return dest;
+            return validRange.GetDest(source);
         }
+        else
+        {
+            return source;
+        }
+    }
 
-        return source;  
+    private class Range
+    {
+        private long SrcMin { get; set; }
+        private long SrcMax { get; set; }
+        
+        private long DstMin { get; set; }
+        private long DstMax { get; set; }
+        
+        public Range(long srcMin, long srcMax, long dstMin, long dstMax)
+        {
+            SrcMin = srcMin;
+            SrcMax = srcMax;
+            DstMin = dstMin;
+            DstMax = dstMax;
+        }
+        
+        public bool IsInRange(long num)
+        {
+            return num >= SrcMin && num <= SrcMax;
+        }
+        
+        public long GetDest(long num)
+        {
+            if (IsInRange(num))
+            {
+                return num - SrcMin + DstMin;
+            }
+
+            return num;
+        }
     }
 }
