@@ -29,7 +29,85 @@ public class Engine
             {
                 for(int x = 0; x < _map[i].Count; x++)
                 {
-                    if (_map[i][x] > 0)
+                    if (_map[i][x] == -2)
+                    {
+                        var parts = new List<int>();
+                        // check for part numbers above
+                        if (i != 0)
+                        {
+                            var min = x == 0 ? x : x - 1;
+                            var max = x + 1 >= _map[i].Count ? _map[i].Count : x + 1 + 1;
+                            for (var a = min; a < max; a++)
+                            {
+                                if (_map[i - 1][a] > 0)
+                                {
+                                    // Get part number
+                                    var num = _parts[i-1][_map[i-1][a]];
+                                    var numLen = num.ToString().Length;
+                                    var nexta = a;
+                                    do
+                                    {
+                                        nexta++;
+                                    } while(nexta < max && _map[i - 1][a] == _map[i - 1][nexta]);
+
+                                    a = nexta - 1;
+                                    parts.Add(num);
+                                }
+                            }
+                        }
+
+                        // Check for part either side of num
+                        if (x != 0)
+                        {
+                            if (_map[i][x - 1] > 0)
+                            {
+                                // Get part number
+                                var num = _parts[i][_map[i][x-1]];
+                                parts.Add(num);
+                            }
+                        }
+
+                        if (x + 1 < _map[i].Count)
+                        {
+                            if (_map[i][x + 1] > 0)
+                            {
+                                // Get part number
+                                var num = _parts[i][_map[i][x+1]];
+                                parts.Add(num);
+                            }
+                        }
+
+                        // Check for part in line below
+                        if (i + 1 < _map.Count)
+                        {
+                            var min = x == 0 ? x : x - 1;
+                            var max = x + 1 >= _map[i].Count ? _map[i].Count : x + 1 + 1;
+                            for (var a = min; a < max; a++)
+                            {
+                                if (_map[i + 1][a] > 0)
+                                {
+                                    // Get part number
+                                    var num = _parts[i+1][_map[i+1][a]];
+                                    var numLen = num.ToString().Length;
+                                    var nexta = a;
+                                    do
+                                    {
+                                        nexta++;
+                                    } while(nexta < max && _map[i + 1][a] == _map[i + 1][nexta]);
+
+                                    a = nexta - 1;
+                                    parts.Add(num);
+                                }
+                            }
+                        }
+                        
+                        if (parts.Count == 2)
+                        {
+                            total += parts[0] * parts[1];
+                        }
+                    }
+
+                    /*if (_map[i][x] > 0)
                     {
                         // Get part number
                         var num = _parts[i][_map[i][x]];
@@ -102,7 +180,7 @@ public class Engine
                         }
 
                         x += numLen - 1;
-                    }
+                    }*/
                 }
             }
 
@@ -130,6 +208,10 @@ public class Engine
                 else if (line[i] == '.')
                 {
                     mapLine.Add(0);
+                }
+                else if (line[i] == '*')
+                {
+                    mapLine.Add(-2);
                 }
                 else
                 {
