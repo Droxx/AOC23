@@ -7,7 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 5 fast">
+    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 5.5 but too slow again">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AOC23/Day5/SeedMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Day5/SeedMapper.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +25,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -161,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701869165869</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="day 5.5 but too slow again">
+      <option name="closed" value="true" />
+      <created>1701869576656</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1701869576656</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,7 +199,8 @@
     <MESSAGE value="gitignore" />
     <MESSAGE value="day 5 but slow, need to refactor" />
     <MESSAGE value="day 5 fast" />
-    <option name="LAST_COMMIT_MESSAGE" value="day 5 fast" />
+    <MESSAGE value="day 5.5 but too slow again" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 5.5 but too slow again" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -199,19 +210,6 @@
           <line>59</line>
           <properties documentPath="C:\Projects\AOC23\AOC23\Day1\CalibrationValues.cs" initialLine="59" containingFunctionPresentation="Method 'GetTotal'" />
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/AOC23/Day5/SeedMapper.cs</url>
-          <line>20</line>
-          <properties documentPath="C:\Projects\AOC23\AOC23\Day5\SeedMapper.cs" initialLine="20" containingFunctionPresentation="Method 'GetClosestSeed'">
-            <startOffsets>
-              <option value="523" />
-            </startOffsets>
-            <endOffsets>
-              <option value="547" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace AOC23.Day5;
 
@@ -17,8 +18,11 @@ public class SeedMapper
     
     public long GetClosestSeed(string input)
     {
+        var sw = new Stopwatch();
+        sw.Start();
         var lines = input.Split("\n");
-        GetSeeds(lines.First());
+        var seedPairs = GetSeedPairs(lines.First());
+        //GetSeeds(lines.First());
         
         GetMapping("seed-to-soil map:", lines, _seedToSoil);
         GetMapping("soil-to-fertilizer map:", lines, _soilToFertilizer);
@@ -29,25 +33,73 @@ public class SeedMapper
         GetMapping("humidity-to-location map:", lines, _humidityToLocation);
 
         long? currentClosestSeed = null;
-        foreach (var seed in _seeds)
+        int pairCount = 1;
+        foreach (var pair in seedPairs)
         {
-            var soil = _seedToSoil.GetDest(seed);
-            var fertilizer = _soilToFertilizer.GetDest(soil);
-            var water = _fertilizerToWater.GetDest(fertilizer);
-            var light = _waterToLight.GetDest(water);
-            var temp = _lightToTemp.GetDest(light);
-            var humidity = _tempToHumidity.GetDest(temp);
-            var location = _humidityToLocation.GetDest(humidity);
-
-            if (currentClosestSeed == null || location < currentClosestSeed)
+            Console.WriteLine($"Working on seed pair ${pairCount} of 10");
+            Console.WriteLine("Calculating seeds...");
+            var seeds = GetSeedsFromPair(pair);
+            var total = seeds.Count;
+            var count = 0;
+            Console.WriteLine($"Got {total} seeds, calculating...");
+            foreach(long seed in seeds)
             {
-                currentClosestSeed = location;
+                var soil = _seedToSoil.GetDest(seed);
+                var fertilizer = _soilToFertilizer.GetDest(soil);
+                var water = _fertilizerToWater.GetDest(fertilizer);
+                var light = _waterToLight.GetDest(water);
+                var temp = _lightToTemp.GetDest(light);
+                var humidity = _tempToHumidity.GetDest(temp);
+                var location = _humidityToLocation.GetDest(humidity);
+
+                if (currentClosestSeed == null || location < currentClosestSeed)
+                {
+                    currentClosestSeed = location;
+                }
+
+                count++;
+                if (count % 100000 == 0)
+                {
+                    Console.Write($"\r{(((decimal)count/(decimal)total) * 100).ToString("F1")}% complete");
+                }
             }
+            Console.Write("\n");
+            Console.WriteLine($"Completed seed pair {pairCount}, took {sw.Elapsed.Minutes} minutes");
+            pairCount++;
         }
 
+        sw.Stop();
+        Console.WriteLine($"Completed all seed pairs, took {sw.Elapsed.Minutes} minutes");
         return currentClosestSeed ?? 0;
     }
 
+    private List<Tuple<long, long>> GetSeedPairs(string input)
+    {
+        var regex = new Regex(@"seeds:\s([\d+ ]+)");
+        var matches = regex.Matches(input);
+        var seedList = matches[0].Groups[1].Value.Split(" ").Where(n => long.TryParse(n, out var p)).Select(n => long.Parse(n)).ToList();
+        var seedPairs = new List<Tuple<long, long>>();
+        for(int i = 0; i < seedList.Count; i++)
+        {
+            seedPairs.Add(new Tuple<long,long>(seedList[i], seedList[i + 1]));
+
+            i++;
+        }
+
+        return seedPairs;
+    }
+
+    private List<long> GetSeedsFromPair(Tuple<long, long> input)
+    {
+        var list = new List<long>();
+        for(int c = 0; c < input.Item2; c++)
+        {
+            list.Add(input.Item1 + c);
+        }
+
+        return list;
+    }
+    
     private void GetSeeds(string input)
     {
         var regex = new Regex(@"seeds:\s([\d+ ]+)");
