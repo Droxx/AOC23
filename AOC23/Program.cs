@@ -1,9 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using AOC23;
 using AOC23.Day1;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
+using AOC23.Day5;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -14,32 +16,11 @@ if (int.TryParse(dayStr, out var day))
     switch (day)
     {
         case 1:
-            Console.WriteLine("Please enter calibration input, followed by an empty line to compute");
-            string calibInput = "";
-            while (true)
-            {
-                var line = Console.ReadLine();
-                if (line == "")
-                {
-                    break;
-                }
-                calibInput += line + "\n";
-            }
-            var calibration = new CalibrationValues(calibInput);
+            var calibration = new CalibrationValues(InputGrabber.GetInput());
             Console.WriteLine(calibration.Compute());
             break;
         case 2:
-            Console.WriteLine("Please enter game input, followed by an empty line to continue");
-            string gameInput = "";
-            while (true)
-            {
-                var line = Console.ReadLine();
-                if (line == "")
-                {
-                    break;
-                }
-                gameInput += line + "\n";
-            }
+            string gameInput = InputGrabber.GetInput();
             Console.WriteLine("Please enter game red max");
             var red = Console.ReadLine();
             Console.WriteLine("Please enter game green max");
@@ -50,35 +31,16 @@ if (int.TryParse(dayStr, out var day))
             Console.WriteLine(gameOb.Play(int.Parse(red), int.Parse(blue), int.Parse(green)));
             break;
         case 3:
-            Console.WriteLine("Please enter engine input, followed by an empty line to continue");
-            string engInput = "";
-            while (true)
-            {
-                var line = Console.ReadLine();
-                if (line == "")
-                {
-                    break;
-                }
-                engInput += line + "\n";
-            }
-
             var en = new Engine();
-            Console.WriteLine(en.SumSchematic(engInput));
+            Console.WriteLine(en.SumSchematic(InputGrabber.GetInput()));
             break;
         case 4:
-            Console.WriteLine("Give input");
-            string scInput = "";
-            while (true)
-            {
-                var line = Console.ReadLine();
-                if (line == "")
-                {
-                    break;
-                }
-                scInput += line + "\n";
-            }
             var sc = new Scratchcards();
-            Console.WriteLine(sc.CalculateWinnings(scInput));
+            Console.WriteLine(sc.CalculateWinnings(InputGrabber.GetInput()));
+            break;
+        case 5:
+            var seedMapper = new SeedMapper();
+            Console.WriteLine(seedMapper.GetClosestSeed(InputGrabber.GetInput("x")));
             break;
         default:
             Console.WriteLine("Day not implemented");

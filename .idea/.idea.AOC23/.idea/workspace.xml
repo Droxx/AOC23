@@ -7,10 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 3 complete">
-      <change afterPath="$PROJECT_DIR$/AOC23/Day4/Scratchcards.cs" afterDir="false" />
+    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="gitignore">
+      <change afterPath="$PROJECT_DIR$/AOC23/Day5/Map.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AOC23/Day5/SeedMapper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AOC23/InputGrabber.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AOC23/AOC23.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/AOC23.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AOC23/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,7 +133,23 @@
       <option name="project" value="LOCAL" />
       <updated>1701861217638</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="day4">
+      <option name="closed" value="true" />
+      <created>1701866689678</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1701866689679</updated>
+    </task>
+    <task id="LOCAL-00005" summary="gitignore">
+      <option name="closed" value="true" />
+      <created>1701866709797</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1701866709797</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,7 +173,9 @@
     <MESSAGE value="day 2" />
     <MESSAGE value="start of day 3" />
     <MESSAGE value="day 3 complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="day 3 complete" />
+    <MESSAGE value="day4" />
+    <MESSAGE value="gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -166,6 +185,19 @@
           <line>59</line>
           <properties documentPath="C:\Projects\AOC23\AOC23\Day1\CalibrationValues.cs" initialLine="59" containingFunctionPresentation="Method 'GetTotal'" />
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/AOC23/Day5/SeedMapper.cs</url>
+          <line>19</line>
+          <properties documentPath="C:\Projects\AOC23\AOC23\Day5\SeedMapper.cs" initialLine="19" containingFunctionPresentation="Method 'GetClosestSeed'">
+            <startOffsets>
+              <option value="484" />
+            </startOffsets>
+            <endOffsets>
+              <option value="514" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
