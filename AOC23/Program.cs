@@ -7,6 +7,7 @@ using AOC23.Day3;
 using AOC23.Day4;
 using AOC23.Day5;
 using AOC23.Day6;
+using AOC23.Day7;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -46,6 +47,10 @@ if (int.TryParse(dayStr, out var day))
         case 6:
             var boatRate = new BoatRace();
             Console.WriteLine(boatRate.WinOptionsMult(InputGrabber.GetInput()));
+            break;
+        case 7:
+            var camel = new CamelCards();
+            Console.WriteLine(camel.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
