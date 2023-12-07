@@ -36,16 +36,17 @@ public class CamelCards
     
     private static Dictionary<char, int> _cardVals = new Dictionary<char, int>
     {
-        { '2', 1 },
-        { '3', 2 },
-        { '4', 3 },
-        { '5', 4 },
-        { '6', 5 },
-        { '7', 6 },
-        { '8', 7 },
-        { '9', 8 },
-        { 'T', 9 },
-        { 'J', 10 },
+        {'J', 1},
+        { '2', 2 },
+        { '3', 3 },
+        { '4', 4 },
+        { '5', 5 },
+        { '6', 6 },
+        { '7', 7 },
+        { '8', 8 },
+        { '9', 9 },
+        { 'T', 10 },
+        //{ 'J', 10 },
         { 'Q', 11 },
         { 'K', 12 },
         { 'A', 13 }
@@ -59,7 +60,7 @@ public class CamelCards
         TOAK = 4,
         TP = 3,
         OP = 2,
-        P = 1
+        HC = 1
     }
 
     private class Hand
@@ -77,47 +78,88 @@ public class CamelCards
             }
             Cards = input.ToCharArray();
             Bid = bid;
-            HandType = CalculateHandType(Cards);
+            var _ht = CalculateHandType(Cards);
+            HandType = Upgrade(_ht, Cards.Count(c => c == 'J'));
+        }
+
+        public HandType Upgrade(HandType type, int numJokers)
+        {
+            var ct = type;
+            for (int i = 0; i < numJokers; i++)
+            {
+                switch (ct)
+                {
+                    case HandType.HC:
+                        ct = HandType.OP;
+                        break;
+                    case HandType.OP:
+                        ct = HandType.TOAK;
+                        break;
+                    case HandType.TP:
+                        ct = HandType.FH;
+                        break;  
+                    case HandType.TOAK:
+                    case HandType.FH:
+                        ct = HandType.FOOAK;
+                        break;
+                    case HandType.FOOAK:
+                        ct = HandType.FIOAK;
+                        break;
+                }
+            }
+
+            return ct;
         }
 
         private static HandType CalculateHandType(char[] cards)
         {
-            if (cards.Distinct().Count() == 1)
+            var testSet = cards.Where(c => c != 'J');
+            var totalJokers = 5 - testSet.Count();
+            
+            if(testSet.Distinct().Count() + totalJokers == 4)
             {
-                return HandType.FIOAK;
+                return HandType.OP;
             }
-
-            if (cards.Distinct().Count() == 2 && cards.GroupBy(c => c).Any(g => g.Count() == 3))
+            
+            if (testSet.Distinct().Count() == 2 && testSet.Count() == 5 && testSet.GroupBy(c => c).All(c => c.Count() < 4))
             {
                 return HandType.FH;
             }
             
-            if (cards.Distinct().Count() == 2)
-            {
-                return HandType.FOOAK;
-            }
-            
-            if(cards.Distinct().Count() == 3 && cards.GroupBy(c => c).Any(g => g.Count() == 2))
+                        
+            if(testSet.GroupBy(c => c).Count(c => c.Count() == 2) == 2)
             {
                 return HandType.TP;
             }
-
-            if(cards.Distinct().Count() == 3)
+            
+            if(testSet.Distinct().Count() + totalJokers == 3)
             {
                 return HandType.TOAK;
             }
             
-            if(cards.Distinct().Count() == 2)
+            if (testSet.Distinct().Count() + totalJokers == 1)
             {
-                return HandType.OP;
+                return HandType.FIOAK;
             }
 
-            return HandType.P;
+
+            
+            if (testSet.Distinct().Count() + totalJokers == 2)
+            {
+                return HandType.FOOAK;
+            }
+
+
+
+            
+
+
+            return HandType.HC;
         }
 
         public long GetScore()
         {
-            var baseScore = (long)HandType * 1000000000000;
+            var baseScore = (long)HandType ;
             
             var additional = 0;
             /*

@@ -7,10 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AOC23/Day7/CamelCards.cs" afterDir="false" />
+    <list default="true" id="f9ca4fba-0d7c-4d02-a4a1-c686c8fd4260" name="Changes" comment="day 7 not working so far">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AOC23/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AOC23/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AOC23/Day7/CamelCards.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AOC23/Day7/CamelCards.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +25,22 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/36e740b59df23626d207e72ea77e34298e53dd99db463eee529f8c416b5664/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b42dbe862dd51fb5e77e5fe0ab92bfe2f4e9d579a34b2110f5a774eaaf7ec/Number.Parsing.cs" root0="SKIP_HIGHLIGHTING" />
@@ -93,7 +108,7 @@
       <workItem from="1701776675647" duration="19000" />
       <workItem from="1701776713586" duration="143000" />
       <workItem from="1701776877100" duration="1122000" />
-      <workItem from="1701934165210" duration="5811000" />
+      <workItem from="1701934165210" duration="10270000" />
     </task>
     <task id="LOCAL-00001" summary="day 2">
       <option name="closed" value="true" />
@@ -183,7 +198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701879233030</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="day 7 not working so far">
+      <option name="closed" value="true" />
+      <created>1701946318571</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701946318571</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,7 +238,8 @@
     <MESSAGE value="day 5.5" />
     <MESSAGE value="day 6 input parsed" />
     <MESSAGE value="day 6 complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="day 6 complete" />
+    <MESSAGE value="day 7 not working so far" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 7 not working so far" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -226,14 +250,27 @@
           <properties documentPath="C:\Projects\AOC23\AOC23\Day1\CalibrationValues.cs" initialLine="59" containingFunctionPresentation="Method 'GetTotal'" />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/AOC23/Day7/CamelCards.cs</url>
+          <line>29</line>
+          <properties documentPath="C:\Projects\AOC23\AOC23\Day7\CamelCards.cs" initialLine="29" containingFunctionPresentation="Method 'Calculate'">
+            <startOffsets>
+              <option value="913" />
+            </startOffsets>
+            <endOffsets>
+              <option value="972" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="DotNetProject">
-        <watch expression="i" language="C#" />
-        <watch expression="x" language="C#" />
-        <watch expression="parts[0]" language="C#" />
-        <watch expression="parts[1]" language="C#" />
+        <watch expression="type" language="C#" />
+        <watch expression="new string(Cards)" language="C#" />
+        <watch expression="new string(cards)" language="C#" />
+        <watch expression="ct" language="C#" />
       </configuration>
     </watches-manager>
   </component>
