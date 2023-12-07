@@ -160,34 +160,7 @@ public class CamelCards
         public long GetScore()
         {
             var baseScore = (long)HandType ;
-            
-            var additional = 0;
-            /*
-            for(int i = 0; i < Cards.Length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        additional += _cardVals[Cards[i]] * 1000000000;
-                        break;
-                    case 1:
-                        additional += _cardVals[Cards[i]] * 1000000;
-                        break;
-                    case 2:
-                        additional += _cardVals[Cards[i]] * 10000;
-                        break;
-                    case 3:
-                        additional += _cardVals[Cards[i]] * 100;
-                        break;
-                    case 4:
-                        additional += _cardVals[Cards[i]];
-                        break;
-                }
-
-            }
-            */
-
-            return (long) baseScore + additional;
+            return (long) baseScore;
         }
     }
 }
