@@ -8,6 +8,7 @@ using AOC23.Day4;
 using AOC23.Day5;
 using AOC23.Day6;
 using AOC23.Day7;
+using AOC23.Day8;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -51,6 +52,10 @@ if (int.TryParse(dayStr, out var day))
         case 7:
             var camel = new CamelCards();
             Console.WriteLine(camel.Calculate(InputGrabber.GetInput()));
+            break;
+        case 8:
+            var desertMap = new DesertMap();
+            Console.WriteLine(desertMap.Navigate(InputGrabber.GetInput("/")));
             break;
         default:
             Console.WriteLine("Day not implemented");
