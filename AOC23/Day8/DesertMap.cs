@@ -11,40 +11,38 @@ public class DesertMap
 
     private Location _start = new Location("AAA");
     private Location _end = new Location("ZZZ");
-    
+
     public long Navigate(string input)
     {
         ParseInput(input);
 
+        var nodes = _maps.Where(m => m.Key.C == 'A').Select(c => new Location($"{c.Key.A}{c.Key.B}{c.Key.C}")).ToList();
+        
         var currentLoc = _start;
         var directionIndex = 0;
-        var steps = 0;
+        long steps = 0;
+
+        var result = _maps
+            .Where(d => d.Key.C == 'A')
+            .Aggregate(1L, (total, next) => LeastCommonMultiple(total, Move(next.Key, (x) => x.C != 'Z')));
         
-        while (!currentLoc.Equals(_end))
-        {
-            var direction = _directions[directionIndex];
-
-            switch (direction)
-            {
-                case Direction.L:
-                    currentLoc = _maps[currentLoc].Left;
-                    break;
-                case Direction.R:
-                    currentLoc = _maps[currentLoc].Right;
-                    break;
-            }
-            
-            if(directionIndex == _directions.Count - 1)
-                directionIndex = 0;
-            else
-                directionIndex++;
-
-            steps++;
-        }
-
-        return steps;
+        return result;
     }
 
+    private long Move(Location location, Func<Location, bool> it)
+    {
+        var result = 0;
+
+        while (it(location))
+        {
+            var direction = _directions[result % _directions.Count];
+            location = direction == Direction.L ? _maps[location].Left : _maps[location].Right;
+            result++;
+        }
+
+        return result++;
+    }
+    
     private void ParseInput(string input)
     {
         var lines = input.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
@@ -110,5 +108,22 @@ public class DesertMap
     {
         L = 'L',
         R = 'R'
+    }
+
+    private long GreatestCommonFactor(long a, long b)
+    {
+        while (b != 0)
+        {
+            long temp = b;
+            b = a % b;
+            a = temp;
+        }
+
+        return a;
+    }
+    
+    private long LeastCommonMultiple(long a, long b)
+    {
+        return (a / GreatestCommonFactor(a, b)) * b;
     }
 }
