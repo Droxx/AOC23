@@ -6,34 +6,24 @@ namespace AOC23.Day8;
 public class DesertMap
 {
     private List<Direction> _directions = new();
-    //private Dictionary<int, Map> _maps = new();
     private Dictionary<Location, Map> _maps = new();
-
-    private Location _start = new Location("AAA");
-    private Location _end = new Location("ZZZ");
 
     public long Navigate(string input)
     {
         ParseInput(input);
-
-        var nodes = _maps.Where(m => m.Key.C == 'A').Select(c => new Location($"{c.Key.A}{c.Key.B}{c.Key.C}")).ToList();
         
-        var currentLoc = _start;
-        var directionIndex = 0;
-        long steps = 0;
-
         var result = _maps
             .Where(d => d.Key.C == 'A')
-            .Aggregate(1L, (total, next) => LeastCommonMultiple(total, Move(next.Key, (x) => x.C != 'Z')));
+            .Aggregate(1L, (total, node) => LeastCommonMultiple(total, GetStepsForNode(node.Key)));
         
         return result;
     }
 
-    private long Move(Location location, Func<Location, bool> it)
+    private long GetStepsForNode(Location location)
     {
         var result = 0;
 
-        while (it(location))
+        while (location.C != 'Z')
         {
             var direction = _directions[result % _directions.Count];
             location = direction == Direction.L ? _maps[location].Left : _maps[location].Right;
@@ -94,13 +84,18 @@ public class DesertMap
             C = loc[2];
         }
 
+        public override string ToString()
+        {
+            return $"{A}{B}{C}";
+        }
+
         public override bool Equals(object? obj)
         {
             return ((Location)obj).A == A && ((Location)obj).B == B && ((Location)obj).C == C;
         }
         
         public override int GetHashCode() {
-            return $"{A}{B}{C}".GetHashCode();
+            return ToString().GetHashCode();
         }
     }
     
