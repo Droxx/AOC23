@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace AOC23.Day8;
@@ -5,10 +6,11 @@ namespace AOC23.Day8;
 public class DesertMap
 {
     private List<Direction> _directions = new();
-    private Dictionary<int, Map> _maps = new();
+    //private Dictionary<int, Map> _maps = new();
+    private Dictionary<Location, Map> _maps = new();
 
-    private int _start = "AAA".Sum(c => c);
-    private int _end = "ZZZ".Sum(c => c);
+    private Location _start = new Location("AAA");
+    private Location _end = new Location("ZZZ");
     
     public long Navigate(string input)
     {
@@ -18,7 +20,7 @@ public class DesertMap
         var directionIndex = 0;
         var steps = 0;
         
-        while (currentLoc != _end)
+        while (!currentLoc.Equals(_end))
         {
             var direction = _directions[directionIndex];
 
@@ -65,19 +67,43 @@ public class DesertMap
             
             var map = new Map
             {
-                Left = right.Sum(c => c),
-                Right = left.Sum(c => c)
+                Left = new Location(left),
+                Right = new Location(right)
             };
             
-            _maps.Add(loc.Sum(c => c), map);
+            //_maps.Add(loc.Sum(c => c), map);
+            _maps.Add(new Location(loc), map);
         }
 
     }
 
     private class Map
     {
-        public int Left { get; set; }
-        public int Right { get; set; }
+        public Location Left { get; set; }
+        public Location Right { get; set; }
+    }
+
+    private class Location
+    {
+        public char A { get; set; }
+        public char B { get; set; }
+        public char C { get; set; }
+
+        public Location(string loc)
+        {
+            A = loc[0];
+            B = loc[1];
+            C = loc[2];
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return ((Location)obj).A == A && ((Location)obj).B == B && ((Location)obj).C == C;
+        }
+        
+        public override int GetHashCode() {
+            return $"{A}{B}{C}".GetHashCode();
+        }
     }
     
     private enum Direction
