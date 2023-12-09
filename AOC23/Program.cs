@@ -9,6 +9,7 @@ using AOC23.Day5;
 using AOC23.Day6;
 using AOC23.Day7;
 using AOC23.Day8;
+using AOC23.Day9;
 
 Console.WriteLine("AOC 23 - BEGIN");
 Console.WriteLine("Which day?");
@@ -56,6 +57,10 @@ if (int.TryParse(dayStr, out var day))
         case 8:
             var desertMap = new DesertMap();
             Console.WriteLine(desertMap.Navigate(InputGrabber.GetInput("/")));
+            break;
+        case 9:
+            var oasis = new Oasis();
+            Console.WriteLine(oasis.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
