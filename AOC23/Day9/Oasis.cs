@@ -15,7 +15,8 @@ public class Oasis
             sequence.Calculate();
         }
 
-        return _sequences.Sum(s => s.Numbers.Last());
+        //return _sequences.Sum(s => s.Numbers.Last());
+        return _sequences.Sum(s => s.Numbers.First());
     }
     
     private void ParseInput(string input)
@@ -45,17 +46,18 @@ public class Oasis
                 subSequence.Calculate();
             }
             
-            ExtrapolateNextDigit(subSequence);
+            //ExtrapolateNextDigit(subSequence);
+            ExtrapolatePreviousDigit(subSequence);
         }
         
         private void ExtrapolateNextDigit(Sequence sub)
         {
-            /*if (sub.Numbers.Count != Numbers.Count - 1)
-            {
-                throw new ArgumentException("The sub sequence should have one less number than the parent sequence");
-            }*/
-
             Numbers.Add(sub.Numbers.Last() + Numbers.Last());
+        }
+
+        private void ExtrapolatePreviousDigit(Sequence sub)
+        {
+            Numbers = Numbers.Prepend(Numbers.First() - sub.Numbers.First()).ToList();
         }
 
         private Sequence GetSubSequence()
