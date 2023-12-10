@@ -9,11 +9,12 @@ public class DesertPipes
     public long Navigate(string input)
     {
         ParseInput(input);
+        var lines = input.Split('\n').Where(l => !string.IsNullOrEmpty(l));
 
         var startPosition = _map.First(m => m.Type == Tile.TileType.Start);
 
         var startingPipes = GetStartingPipes(startPosition);
-        var steps = 0;
+        var steps = 1;
         
         var currentA = startingPipes.Item1;
         var previousA = startPosition;
@@ -29,7 +30,29 @@ public class DesertPipes
             previousB = currentB;
             currentA = newA;
             currentB = newB;
-        } while (currentA != currentB);
+            
+            Console.Clear();
+            for (int y = 0; y < lines.Count(); y++)
+            {
+                for (int x = 0; x < lines.ElementAt(y).Count(); x++)
+                {
+                    if (currentA.X == x && currentA.Y == y)
+                    {
+                        Console.Write('X');
+                    }
+                    else if (currentB.X == x && currentB.Y == y)
+                    {
+                        Console.Write('X');
+                    }
+                    else
+                    {
+                        Console.Write(lines.ElementAt(y)[x]);
+                    }
+                    
+                }
+                Console.Write("\n\r");
+            }
+        } while (currentA != currentB && (currentA != startPosition || currentB != startPosition));
 
 
         return steps;
@@ -46,39 +69,71 @@ public class DesertPipes
             case Tile.PipeDirection.Horizontal:
                 return _map.FirstOrDefault(t => t.X == previous.X + (xDif*2) && t.Y == previous.Y);
             case Tile.PipeDirection.NEBend:
-                return _map.FirstOrDefault(t => t.X == previous.X + xDif && t.Y == previous.Y - yDif);
+                if (yDif == 1) // Pipe is below previous tile
+                {
+                    return _map.FirstOrDefault(t => t.X == previous.X + 1 && t.Y == previous.Y + 1);
+                }
+
+                return _map.FirstOrDefault(t => t.X == previous.X - 1  && t.Y == previous.Y + 1);
             case Tile.PipeDirection.NWBend:
-                return _map.FirstOrDefault(t => t.X == previous.X - xDif && t.Y == previous.Y - yDif);
+                if (yDif == 1) // Pipe is below previous tile
+                {
+                    return _map.FirstOrDefault(t => t.X == previous.X - 1 && t.Y == previous.Y + 1);
+                }
+                return _map.FirstOrDefault(t => t.X == previous.X + 1 && t.Y == previous.Y - 1);  
+
             case Tile.PipeDirection.SEBend:
-                return _map.FirstOrDefault(t => t.X == previous.X + xDif && t.Y == previous.Y + yDif);
+                if (yDif == -1) // Pipe is above previous tile
+                {
+                    return _map.FirstOrDefault(t => t.X == previous.X + 1 && t.Y == previous.Y - 1);
+                }
+                return _map.FirstOrDefault(t => t.X == previous.X - 1 && t.Y == previous.Y - 1);
             case Tile.PipeDirection.SWBend:
-                return _map.FirstOrDefault(t => t.X == previous.X - xDif && t.Y == previous.Y + yDif);
+                if (yDif == -1) // Pipe is above previous tile
+                {
+                    return _map.FirstOrDefault(t => t.X == previous.X - 1  && t.Y == previous.Y - 1);
+                }
+                return _map.FirstOrDefault(t => t.X == previous.X + 1  && t.Y == previous.Y + 1);
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
-    
+
     private Tuple<Tile, Tile> GetStartingPipes(Tile startPosition)
     {
         Tile? first = null;
-        for(var x = startPosition.X -1; x <= startPosition.X + 1; x++)
+        for (var x = -1; x <= 1; x += 2)
         {
-            for(var y = startPosition.Y -1; y <= startPosition.Y + 1; y++)
+            var tile = _map.FirstOrDefault(t => t.X == startPosition.X + x && t.Y == startPosition.Y);
+            if (tile != null && tile.Type == Tile.TileType.Pipe)
             {
-                var tile = _map.FirstOrDefault(t => t.X == x && t.Y == y);
-                if (tile != null && tile.Type == Tile.TileType.Pipe)
+                if (first == null)
                 {
-                    if (first == null)
-                    {
-                        first = tile;
-                    }
-                    else
-                    {
-                        return new Tuple<Tile, Tile>(first, tile);
-                    }
+                    first = tile;
+                }
+                else
+                {
+                    return new Tuple<Tile, Tile>(first, tile);
                 }
             }
         }
+
+        for (var y = -1; y <= 1; y += 2)
+        {
+            var tile = _map.FirstOrDefault(t => t.X == startPosition.X && t.Y == startPosition.Y + y);
+            if (tile != null && tile.Type == Tile.TileType.Pipe)
+            {
+                if (first == null)
+                {
+                    first = tile;
+                }
+                else
+                {
+                    return new Tuple<Tile, Tile>(first, tile);
+                }
+            }
+        }
+
         throw new Exception("No starting pipes found");
     }
 
@@ -142,13 +197,13 @@ public class DesertPipes
             Horizontal = '-',
             NEBend = 'L',
             NWBend = 'J',
-            SEBend = '7',
-            SWBend = 'F'
+            SEBend = 'F',
+            SWBend = '7'
         }
 
         public override int GetHashCode()
         {
-            return X.GetHashCode() ^ Y.GetHashCode();
+            return $"{X}{Y}".GetHashCode();
         }
 
         public override bool Equals(object? obj)
