@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace AOC23.Day10;
 
 public class DesertPipes
@@ -5,6 +7,7 @@ public class DesertPipes
     private List<Tile> _map = new();
 
     private List<Tile> _visitedTiles = new List<Tile>();
+    private List<Tile> _encompassed = new List<Tile>();
     
     public long Navigate(string input)
     {
@@ -18,6 +21,7 @@ public class DesertPipes
         
         var currentA = startingPipes.Item1;
         var previousA = startPosition;
+        _visitedTiles.Add(currentA);
         var currentB = startingPipes.Item2;
         var previousB = startPosition;
         Console.Clear();
@@ -26,12 +30,48 @@ public class DesertPipes
         {
             steps++;
             var newA = FollowPipe(currentA, previousA);
-            var newB = FollowPipe(currentB, previousB);
             previousA = currentA;
-            previousB = currentB;
             currentA = newA;
-            currentB = newB;
             
+            /*
+            if(AnyAdjacentVisitedBefore(currentA, previousA, out var adjacent))
+            {
+                var polygon = new List<Tile>();
+                for (int i = _visitedTiles.Count()-1; i >= _visitedTiles.IndexOf(adjacent); i--)
+                {
+                    polygon.Add(_visitedTiles.ElementAt(i));
+                }
+
+                var polyMaxX = polygon.Max(p => p.X);
+                var polyMinX = polygon.Min(p => p.X);
+                var polyMaxY = polygon.Max(p => p.Y);
+                var polyMinY = polygon.Min(p => p.Y);
+                
+                for (int y = polyMinY; y < polyMaxY; y++)
+                {
+                    for (int x = polyMinX; x < polyMaxX; x++)
+                    {
+                        var point = _map.FirstOrDefault(t => t.X == x && t.Y == y);
+                        if(!_visitedTiles.Contains(point) && !_encompassed.Contains(point) && IsInPolygon(_map.FirstOrDefault(t => t.X == x && t.Y == y), polygon.ToArray()))
+                        {
+                            _encompassed.Add(point);
+                        }
+                    }
+                }
+            }
+            */
+            
+            
+            
+            _visitedTiles.Add(currentA);
+            
+            Console.Write($"On step {steps} of ~14000\r");
+            // For two runners in oposite directions
+            //var newB = FollowPipe(currentB, previousB);
+            //previousB = currentB;
+            //currentB = newB;
+
+            // For debug printing
             /*Console.WriteLine($"Step {steps}");
             for (int y = startPosition.Y - 10; y < startPosition.Y + 10; y++)
             {
@@ -55,10 +95,114 @@ public class DesertPipes
             }
             Console.Write("\n\r");
             Console.Write("\n\r");*/
-        } while (currentA != currentB && (currentA != startPosition || currentB != startPosition));
+        } while (currentA != startPosition);
 
+        Console.Write("\n\r");
+        Console.Write("\n\r");
 
-        return steps;
+        for (int y = 0; y < lines.Count(); y++)
+        {
+            for (int x =  0; x < lines.ElementAt(y).Count(); x++)
+            {
+                if (_visitedTiles.Any(v => v.X == x && v.Y == y))
+                {
+                    Console.Write(lines.ElementAt(y)[x]);
+
+                }
+                else if (_encompassed.Any(v => v.X == x && v.Y == y))
+                {
+                    Console.Write('I');
+                }
+                else
+                {
+                    Console.Write(lines.ElementAt(y)[x]);
+
+                    //Console.Write('O');
+                }
+            }
+            Console.Write("\n\r");
+        }
+_visitedTiles.Add(startPosition);
+        var area = Math.Abs(_visitedTiles.Take(_visitedTiles.Count - 1)
+            .Select((p, i) => (_visitedTiles[i + 1].X - p.X) * (_visitedTiles[i + 1].Y + p.Y))
+            .Sum() / 2);
+        
+        /*foreach (var vi in _encompassed)
+        {
+            if (!_visitedTiles.Contains(vi))
+            {
+                area++;10
+            }
+        }*/
+        
+        return area;
+    }
+
+    private bool AnyAdjacentVisitedBefore(Tile current, Tile previous, out Tile? adjacent)
+    {
+        for (var x = -1; x <= 1; x += 2)
+        {
+            var tile = _visitedTiles.FirstOrDefault(t => t.X == current.X + x && t.Y == current.Y);
+            if (tile != null && !tile.Equals(previous))
+            {
+                adjacent = tile;
+                return true;
+            }
+        }
+
+        for (var y = -1; y <= 1; y += 2)
+        {
+            var tile = _visitedTiles.FirstOrDefault(t => t.X == current.X && t.Y == current.Y + y);
+            if (tile != null && !tile.Equals(previous))
+            {
+                adjacent = tile;
+                return true;
+            }
+        }
+
+        adjacent = null;
+        return false;
+    }
+    
+    private bool IsInPolygon( Tile p, Tile[] poly)
+    {
+        Point p1, p2;
+        bool inside = false;
+
+        if (poly.Length < 3)
+        {
+            return inside;
+        }
+
+        var oldPoint = new Point(
+            poly[poly.Length - 1].X, poly[poly.Length - 1].Y);
+
+        for (int i = 0; i < poly.Length; i++)
+        {
+            var newPoint = new Point(poly[i].X, poly[i].Y);
+
+            if (newPoint.X > oldPoint.X)
+            {
+                p1 = oldPoint;
+                p2 = newPoint;
+            }
+            else
+            {
+                p1 = newPoint;
+                p2 = oldPoint;
+            }
+
+            if ((newPoint.X < p.X) == (p.X <= oldPoint.X)
+                && (p.Y - (long) p1.Y)*(p2.X - p1.X)
+                < (p2.Y - (long) p1.Y)*(p.X - p1.X))
+            {
+                inside = !inside;
+            }
+
+            oldPoint = newPoint;
+        }
+
+        return inside;
     }
 
     private Tile FollowPipe(Tile pipe, Tile previous)
@@ -206,6 +350,7 @@ public class DesertPipes
 
         public override int GetHashCode()
         {
+            return (X *100) + Y;
             return $"{X}{Y}".GetHashCode();
         }
 
