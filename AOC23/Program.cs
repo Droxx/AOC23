@@ -2,6 +2,7 @@
 
 using AOC23;
 using AOC23.Day1;
+using AOC23.Day10;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -61,6 +62,10 @@ if (int.TryParse(dayStr, out var day))
         case 9:
             var oasis = new Oasis();
             Console.WriteLine(oasis.Calculate(InputGrabber.GetInput()));
+            break;
+        case 10:
+            var desertPipes = new DesertPipes();
+            Console.WriteLine(desertPipes.Navigate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
