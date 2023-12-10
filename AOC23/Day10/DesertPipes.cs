@@ -20,6 +20,7 @@ public class DesertPipes
         var previousA = startPosition;
         var currentB = startingPipes.Item2;
         var previousB = startPosition;
+        Console.Clear();
 
         do
         {
@@ -31,10 +32,10 @@ public class DesertPipes
             currentA = newA;
             currentB = newB;
             
-            Console.Clear();
-            for (int y = 0; y < lines.Count(); y++)
+            /*Console.WriteLine($"Step {steps}");
+            for (int y = startPosition.Y - 10; y < startPosition.Y + 10; y++)
             {
-                for (int x = 0; x < lines.ElementAt(y).Count(); x++)
+                for (int x = startPosition.X - 10; x < startPosition.X + 10; x++)
                 {
                     if (currentA.X == x && currentA.Y == y)
                     {
@@ -48,10 +49,12 @@ public class DesertPipes
                     {
                         Console.Write(lines.ElementAt(y)[x]);
                     }
-                    
                 }
                 Console.Write("\n\r");
+
             }
+            Console.Write("\n\r");
+            Console.Write("\n\r");*/
         } while (currentA != currentB && (currentA != startPosition || currentB != startPosition));
 
 
@@ -74,7 +77,7 @@ public class DesertPipes
                     return _map.FirstOrDefault(t => t.X == previous.X + 1 && t.Y == previous.Y + 1);
                 }
 
-                return _map.FirstOrDefault(t => t.X == previous.X - 1  && t.Y == previous.Y + 1);
+                return _map.FirstOrDefault(t => t.X == previous.X - 1  && t.Y == previous.Y - 1);
             case Tile.PipeDirection.NWBend:
                 if (yDif == 1) // Pipe is below previous tile
                 {
@@ -87,7 +90,7 @@ public class DesertPipes
                 {
                     return _map.FirstOrDefault(t => t.X == previous.X + 1 && t.Y == previous.Y - 1);
                 }
-                return _map.FirstOrDefault(t => t.X == previous.X - 1 && t.Y == previous.Y - 1);
+                return _map.FirstOrDefault(t => t.X == previous.X - 1 && t.Y == previous.Y + 1);
             case Tile.PipeDirection.SWBend:
                 if (yDif == -1) // Pipe is above previous tile
                 {
