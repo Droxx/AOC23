@@ -3,6 +3,7 @@
 using AOC23;
 using AOC23.Day1;
 using AOC23.Day10;
+using AOC23.Day11;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -66,6 +67,10 @@ if (int.TryParse(dayStr, out var day))
         case 10:
             var desertPipes = new DesertPipes();
             Console.WriteLine(desertPipes.Navigate(InputGrabber.GetInput()));
+            break;
+        case 11:
+            var galaxies = new Galaxies();
+            Console.WriteLine(galaxies.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
