@@ -15,22 +15,22 @@ public class SpringSchematics
         int finishedLines = 0;
         
         
-        Parallel.ForEach(_lines, l =>
+        /*Parallel.ForEach(_lines, l =>
         {
             Console.WriteLine($"Line {_lines.IndexOf(l)} START");
             l.Possibilities = Possibilities(l.RawRange, l.Summaries);
             Console.WriteLine($"Line {_lines.IndexOf(l)} END");
             Interlocked.Increment(ref finishedLines);
             Console.WriteLine($"Completed {finishedLines} of {_lines.Count}");
-        });
+        });*/
         
         
-        /*foreach (var line in _lines)
+        foreach (var line in _lines)
         {
             line.Possibilities = Possibilities(line.RawRange, line.Summaries);
             Interlocked.Increment(ref finishedLines);
             Console.WriteLine($"Completed {finishedLines} of {_lines.Count}");
-        }*/
+        }
 
         return _lines.Sum(l => l.Possibilities);
     }
@@ -47,41 +47,44 @@ public class SpringSchematics
         return result;
     }
 
-    private ConcurrentDictionary<string, int> _cache = new();
+    private Dictionary<string, int> _cache = new();
 
     public int Possibilities(string line, List<int> remainingGroups)
-    {
+    {            
+        var result = 0;
+
+        string runKey = line + string.Join(",", remainingGroups);
+
+        if (_cache.TryGetValue(runKey, out var res))
+        {
+            return res;
+        }
+        
         // If we are at the end of a line and there are no more groups, then this is a possible combo
         // Otherwise it's a failure, so return 0
         if (line.Length == 0)
         {
             if (remainingGroups.Count == 0)
             {
-                return 1;
+                result = 1;
             }
             else
             {
-                return 0;
+                result = 0;
             }
         }
         
         // If it's a functional pump, remove that character and recurse
-        if (line[0] == '.')
+        else if (line[0] == '.')
         {
-            return Possibilities(line.Substring(1), remainingGroups);
+            result = Possibilities(line.Substring(1), remainingGroups);
         }
         
         // If it's unknown, we need to diverge, two possibilities, two recursive paths
-        if (line[0] == '?')
+        else if (line[0] == '?')
         {
-            string runKey = line + string.Join(",", remainingGroups);
 
-            if (_cache.TryGetValue(runKey, out var res))
-            {
-                return res;
-            }
             
-            var result = 0;
             
             var functionalLine = line.ToCharArray();
             functionalLine[0] = '.';
@@ -95,22 +98,13 @@ public class SpringSchematics
             result += Possibilities(new string(defectiveLine), remainingGroups);
             //Console.WriteLine($"{result}\t{remainingGroups.Count}\t{new string(defectiveLine)}");
 
-            try
-            {
-                _cache.TryAdd(runKey, result);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
             return result;
         }
 
         // If it's defective, we now need to check it against the remaining groups
         // If it matches a group length, then we can remove that group from both the string and the remaining groups.
         // Then recurse further
-        if (line[0] == '#')
+        else if (line[0] == '#')
         {
             if (remainingGroups.Any())
             {
@@ -120,7 +114,6 @@ public class SpringSchematics
                     var potential = line.Substring(0, nextGroup);
                     if (potential.All(p => p != '.') && (line.Length == nextGroup || line[nextGroup] != '#'))
                     {
-                        var result = 0;
                         if (line.Length > nextGroup && line[nextGroup] == '?')
                         {
                             result = Possibilities(line.Substring(nextGroup+1), remainingGroups.Skip(1).ToList());
@@ -133,20 +126,35 @@ public class SpringSchematics
                         {
                             result = Possibilities(line.Substring(nextGroup), remainingGroups.Skip(1).ToList());
                         }
-
-                        return result;
+                    }
+                    else
+                    {
+                        result = 0;
                     }
                 }
+                else
+                {
+                    result = 0;
+                }
             }
-
-            // We have a defective pump but run out of groups,
-            // or the next group is too long,
-            // or the line does not contain a group long enough, so cannot possibly match
-            // we failed, drop out of recursion
-            return 0;
+            else
+            {
+                result = 0;
+            }
         }
 
-        throw new Exception("Encountered an unexpected character");
+        
+        try
+        {
+            _cache.TryAdd(runKey, result);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return result;
+        //throw new Exception("Encountered an unexpected character");
     }
 
     private void ParseInput(string input)
