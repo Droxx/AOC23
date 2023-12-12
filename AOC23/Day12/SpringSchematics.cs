@@ -24,13 +24,13 @@ public class SpringSchematics
         // Otherwise it's a failure, so return 0
         if (line.Length == 0)
         {
-            if (remainingGroups.Count > 0)
+            if (remainingGroups.Count == 0)
             {
-                return 0;
+                return 1;
             }
             else
             {
-                return 1;
+                return 0;
             }
         }
         
@@ -49,11 +49,13 @@ public class SpringSchematics
             functionalLine[0] = '.';
 
             result += Possibilities(new string(functionalLine), remainingGroups);
-
+           // Console.WriteLine($"{result}\t{remainingGroups.Count}\t{new string(functionalLine)}");
+            
             var defectiveLine = line.ToCharArray();
             defectiveLine[0] = '#';
             
             result += Possibilities(new string(defectiveLine), remainingGroups);
+           //Console.WriteLine($"{result}\t{remainingGroups.Count}\t{new string(defectiveLine)}");
 
             return result;
         }
@@ -66,21 +68,24 @@ public class SpringSchematics
             if (remainingGroups.Any())
             {
                 var nextGroup = remainingGroups.FirstOrDefault();
-                if (nextGroup < line.Length)
+                if (nextGroup <= line.Length)
                 {
-                    for (int i = 0; i < nextGroup; i++)
+                    var potential = line.Substring(0, nextGroup);
+                    if (potential.All(p => p != '.') && (line.Length == nextGroup || line[nextGroup] != '#'))
                     {
-                        // We're expecitng a group of N length defective, but we hit a working pump. So this is a fail, drop out of recursion
-                        if(line[i] == '.')
-                            return 0;
+                        if (line.Length > nextGroup && line[nextGroup] == '?')
+                        {
+                            return Possibilities(line.Substring(nextGroup+1), remainingGroups.Skip(1).ToList());
+                        }
+                        return Possibilities(line.Substring(nextGroup), remainingGroups.Skip(1).ToList());
                     }
-                    
-                    // If we got here, we 'possibly' found a group. Remove the substring and the group and keep resolving
-                    return Possibilities(line.Substring(nextGroup), remainingGroups.Skip(1).ToList());
                 }
             }
 
-            // We have a defective pump but run out of groups, or the next group is too long, so we failed, drop out of recursion
+            // We have a defective pump but run out of groups,
+            // or the next group is too long,
+            // or the line does not contain a group long enough, so cannot possibly match
+            // we failed, drop out of recursion
             return 0;
         }
 
