@@ -15,9 +15,12 @@ public class SpringSchematics
         
         Parallel.ForEach(_lines, l =>
         {
-            //Console.WriteLine($"Line {_lines.IndexOf(l)} START");
-            l.Possibilities = Possibilities(l.RawRange, l.Summaries);
-            //Console.WriteLine($"Line {_lines.IndexOf(l)} END");
+            var firstAns = Possibilities(l.RawRange, l.Summaries);
+            var secondPart = Possibilities(l.RawRangePart2, l.Summaries);
+
+            var secondPartExp = Math.Pow(secondPart, 4);
+            l.Possibilities = firstAns * (long)secondPartExp;
+            
             Interlocked.Increment(ref finishedLines);
             Console.WriteLine($"Completed {finishedLines} of {_lines.Count}");
         });
@@ -32,8 +35,12 @@ public class SpringSchematics
         return _lines.Sum(l => l.Possibilities);
     }
 
-    public int Possibilities(string line, List<int> remainingGroups)
+    private Dictionary<int, long> _cached = new();
+
+    public long Possibilities(string line, List<int> remainingGroups)
     {
+
+        
         // If we are at the end of a line and there are no more groups, then this is a possible combo
         // Otherwise it's a failure, so return 0
         if (line.Length == 0)
@@ -57,7 +64,13 @@ public class SpringSchematics
         // If it's unknown, we need to diverge, two possibilities, two recursive paths
         if (line[0] == '?')
         {
-            var result = 0;
+            var runKey = line.GetHashCode() * remainingGroups.GetHashCode();
+            if (_cached.ContainsKey(runKey))
+            {
+                return _cached[runKey];
+            }
+            
+            long result = 0;
             
             var functionalLine = line.ToCharArray();
             functionalLine[0] = '.';
@@ -71,6 +84,8 @@ public class SpringSchematics
             result += Possibilities(new string(defectiveLine), remainingGroups);
            //Console.WriteLine($"{result}\t{remainingGroups.Count}\t{new string(defectiveLine)}");
 
+            _cached.Add(runKey, result);
+           
             return result;
         }
 
@@ -115,31 +130,25 @@ public class SpringSchematics
             var ranges = line.Split(' ')[0];
             var summaries = line.Split(' ')[1];
 
-            var expanded = "";
-            for (int i = 0; i < 5; i++)
-            {
-                expanded += ranges + "?";
-            }
-            // remove one character from end
-            expanded = expanded.Substring(0, expanded.Length - 1);
+            
+            var qsatend = ranges.Length - ranges.TrimEnd('?').Length;
+            
+            
+            var part2Ranges = '?' + new string('?', qsatend) + ranges;
+            
 
-            expanded = "?" + expanded;
+            //var part2Ranges = '?' + ranges;
             
             var l = new Line
             {
-                Length = expanded.Length,
-                RawRange = expanded,
-                Ranges = Line.ParseLine(expanded.ToCharArray())
+                RawRange = ranges,
+                RawRangePart2 = part2Ranges,
             };
-            
-            for (int i = 0; i <5; i++)
+
+            foreach (var summary in summaries.Split(','))
             {
-                foreach (var summary in summaries.Split(','))
-                {
-                    l.Summaries.Add(int.Parse(summary));
-                }
+                l.Summaries.Add(int.Parse(summary));
             }
-            Console.WriteLine(expanded);
             
             _lines.Add(l);
         }
@@ -147,12 +156,10 @@ public class SpringSchematics
 
     private class Line
     {
-        public int Length { get; set; }
         public string RawRange { get; set; }
         public string RawRangePart2 { get; set; }
-        public List<SpringRange> Ranges { get; set; } = new();
         public List<int> Summaries { get; set; } = new();
-        public int Possibilities { get; set; }
+        public long Possibilities { get; set; }
 
         public bool DoesSatisfySummary(char[] range)
         {
