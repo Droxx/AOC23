@@ -111,6 +111,10 @@ public class SpringSchematics
                 var nextGroup = remainingGroups.FirstOrDefault();
                 if (nextGroup <= line.Length)
                 {
+                    // TODO: I think the bug is that if i have say 6 # characters and the summary is 5,1
+                    // Then i will remove 5 characters, and also the 5 from the summary, leaving me with 1 hash and one 
+                    // result for that block of 6. When in fact, there were 2 possibilities here! not just one
+                    
                     var potential = line.Substring(0, nextGroup);
                     if (potential.All(p => p != '.') && (line.Length == nextGroup || line[nextGroup] != '#'))
                     {
