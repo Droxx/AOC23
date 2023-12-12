@@ -1,4 +1,6 @@
-﻿namespace AOC23.Day12;
+﻿using System.Collections.Concurrent;
+
+namespace AOC23.Day12;
 
 public class SpringSchematics
 {
@@ -16,10 +18,10 @@ public class SpringSchematics
         Parallel.ForEach(_lines, l =>
         {
             var firstAns = Possibilities(l.RawRange, l.Summaries);
-            var secondPart = Possibilities(l.RawRangePart2, l.Summaries);
+            //var secondPart = Possibilities(l.RawRangePart2, l.Summaries);
 
-            var secondPartExp = Math.Pow(secondPart, 4);
-            l.Possibilities = firstAns * (long)secondPartExp;
+            //var secondPartExp = Math.Pow(secondPart, 4);
+            l.Possibilities = firstAns;// * (long)secondPartExp;
             
             Interlocked.Increment(ref finishedLines);
             Console.WriteLine($"Completed {finishedLines} of {_lines.Count}");
@@ -35,7 +37,7 @@ public class SpringSchematics
         return _lines.Sum(l => l.Possibilities);
     }
 
-    private Dictionary<int, long> _cached = new();
+    private ConcurrentDictionary<int, long> _cached = new();
 
     public long Possibilities(string line, List<int> remainingGroups)
     {
@@ -65,9 +67,9 @@ public class SpringSchematics
         if (line[0] == '?')
         {
             var runKey = line.GetHashCode() * remainingGroups.GetHashCode();
-            if (_cached.ContainsKey(runKey))
+            if (_cached.TryGetValue(runKey, out var possibilities))
             {
-                return _cached[runKey];
+                return possibilities;
             }
             
             long result = 0;
@@ -84,7 +86,7 @@ public class SpringSchematics
             result += Possibilities(new string(defectiveLine), remainingGroups);
            //Console.WriteLine($"{result}\t{remainingGroups.Count}\t{new string(defectiveLine)}");
 
-            _cached.Add(runKey, result);
+            //_cached.TryAdd(runKey, result);
            
             return result;
         }
@@ -131,23 +133,30 @@ public class SpringSchematics
             var summaries = line.Split(' ')[1];
 
             
-            var qsatend = ranges.Length - ranges.TrimEnd('?').Length;
-            
-            
-            var part2Ranges = '?' + new string('?', qsatend) + ranges;
+            var expanded = "";
+            for (int i = 0; i < 5; i++)
+            {
+                expanded += ranges + "?";
+            }
+            // remove one character from end
+            expanded = expanded.Substring(0, expanded.Length - 1);
+
+            expanded = "?" + expanded;
             
 
             //var part2Ranges = '?' + ranges;
             
             var l = new Line
             {
-                RawRange = ranges,
-                RawRangePart2 = part2Ranges,
+                RawRange = expanded,
             };
 
-            foreach (var summary in summaries.Split(','))
+            for (int i = 0; i <5; i++)
             {
-                l.Summaries.Add(int.Parse(summary));
+                foreach (var summary in summaries.Split(','))
+                {
+                    l.Summaries.Add(int.Parse(summary));
+                }
             }
             
             _lines.Add(l);
