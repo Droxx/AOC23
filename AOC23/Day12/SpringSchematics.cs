@@ -47,11 +47,11 @@ public class SpringSchematics
         return result;
     }
 
-    private Dictionary<string, int> _cache = new();
+    private Dictionary<string, long> _cache = new();
 
-    public int Possibilities(string line, List<int> remainingGroups)
+    public long Possibilities(string line, List<int> remainingGroups)
     {            
-        var result = 0;
+        long result = 0;
 
         string runKey = line + string.Join(",", remainingGroups);
 
