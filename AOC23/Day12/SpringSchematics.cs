@@ -10,12 +10,26 @@ public class SpringSchematics
 
         long possibilities = 0;
 
-        foreach (var line in _lines)
+        int finishedLines = 0;
+        
+        
+        Parallel.ForEach(_lines, l =>
         {
+            //Console.WriteLine($"Line {_lines.IndexOf(l)} START");
+            l.Possibilities = Possibilities(l.RawRange, l.Summaries);
+            //Console.WriteLine($"Line {_lines.IndexOf(l)} END");
+            Interlocked.Increment(ref finishedLines);
+            Console.WriteLine($"Completed {finishedLines} of {_lines.Count}");
+        });
+        
+        /*foreach (var line in _lines)
+        {
+            lineCount++;
+            Console.WriteLine($"Line {lineCount}");
             possibilities += Possibilities(line.RawRange, line.Summaries);
-        }
+        }*/
 
-        return possibilities;
+        return _lines.Sum(l => l.Possibilities);
     }
 
     public int Possibilities(string line, List<int> remainingGroups)
@@ -100,17 +114,32 @@ public class SpringSchematics
         {
             var ranges = line.Split(' ')[0];
             var summaries = line.Split(' ')[1];
+
+            var expanded = "";
+            for (int i = 0; i < 5; i++)
+            {
+                expanded += ranges + "?";
+            }
+            // remove one character from end
+            expanded = expanded.Substring(0, expanded.Length - 1);
+
+            expanded = "?" + expanded;
+            
             var l = new Line
             {
-                Length = ranges.Length,
-                RawRange = ranges,
-                Ranges = Line.ParseLine(ranges.ToCharArray())
+                Length = expanded.Length,
+                RawRange = expanded,
+                Ranges = Line.ParseLine(expanded.ToCharArray())
             };
             
-            foreach (var summary in summaries.Split(','))
+            for (int i = 0; i <5; i++)
             {
-                l.Summaries.Add(int.Parse(summary.ToString()));
+                foreach (var summary in summaries.Split(','))
+                {
+                    l.Summaries.Add(int.Parse(summary));
+                }
             }
+            Console.WriteLine(expanded);
             
             _lines.Add(l);
         }
@@ -120,6 +149,7 @@ public class SpringSchematics
     {
         public int Length { get; set; }
         public string RawRange { get; set; }
+        public string RawRangePart2 { get; set; }
         public List<SpringRange> Ranges { get; set; } = new();
         public List<int> Summaries { get; set; } = new();
         public int Possibilities { get; set; }
