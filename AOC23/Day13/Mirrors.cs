@@ -115,6 +115,7 @@ public class Mirrors
         var a = startAfterIndex;
         var b = startAfterIndex + 1;
         var list = useCols ? map.Cols : map.Rows;
+        bool foundSmudge = false;
         while (a >= 0 && b < list.Count)
         {
             var compared = CompareLines(map, useCols, a, list[a], list[b], isClean);
@@ -123,18 +124,24 @@ public class Mirrors
                 a--;
                 b++;
             }
-            else
+            else if (compared == 1)
+            {
+                a--;
+                b++;
+                foundSmudge = true;
+            }
+            else 
             {
                 return 0;
                 break;
             }
         }
 
-        if(a == -1)
+        if(a == -1 && foundSmudge)
         {
             return 1;
         }
-        if(b == list.Count)
+        if(b == list.Count && foundSmudge)
         {
             return list.Count - 1;
         }
@@ -191,7 +198,7 @@ public class Mirrors
 
         repairedA = new string(repairedAArr);
 
-        if (diffs == 1 && !isClean)
+        /*if (diffs == 1 && !isClean)
         {
             var list = useCols ? map.Cols : map.Rows;
             list[index] = repairedA;
@@ -201,7 +208,7 @@ public class Mirrors
             otherList[repairedAIndex] = new string(repaired);
 
             throw new SmudgeException(map);
-        }
+        }*/
         
         return diffs;
     }
