@@ -5,6 +5,7 @@ using AOC23.Day1;
 using AOC23.Day10;
 using AOC23.Day11;
 using AOC23.Day12;
+using AOC23.Day13;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -76,6 +77,10 @@ if (int.TryParse(dayStr, out var day))
         case 12:
             var springs = new SpringSchematics();
             Console.WriteLine(springs.Calculate(InputGrabber.GetInput()));
+            break;
+        case 13:
+            var mirrors = new Mirrors();
+            Console.WriteLine(mirrors.Calculate(InputGrabber.GetInput("x")));
             break;
         default:
             Console.WriteLine("Day not implemented");
