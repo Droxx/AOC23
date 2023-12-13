@@ -25,24 +25,17 @@ public class Mirrors
 
         try
         {
-            verInd = GetReflectionIndex(map.Cols,isClean);
+            verInd = GetReflectionIndex(map, true, isClean);
+            horInd = GetReflectionIndex(map, false, isClean);
+
         }
         catch (SmudgeException ex)
         {
             isClean = true;
-            verInd = GetReflectionIndex(ex.RepairedLines, isClean);
-        }
+            verInd = GetReflectionIndex(ex.RepairedMap, true, isClean);
+            horInd = GetReflectionIndex(ex.RepairedMap, false, isClean);
 
-        try
-        {
-            horInd = GetReflectionIndex(map.Rows);
         }
-        catch (SmudgeException ex)
-        {
-            isClean = true;
-            horInd = GetReflectionIndex(ex.RepairedLines, isClean);
-        }
-
 
         //verRowsLeft = Math.Abs(map.Cols.Count - (map.Cols.Count - verInd));
         //horColsAbove = Math.Abs(map.Rows.Count - (map.Rows.Count -horInd));
@@ -75,10 +68,11 @@ public class Mirrors
         return horColsLeft;
     }
 
-    private int GetReflectionIndex(List<string> list, bool isClean = false)
+    private int GetReflectionIndex(Map map, bool useCols, bool isClean = false)
     {
         var currentReflectionSize = 0;
         var reflectionStartAfterIndex = -1;
+        var list = useCols ? map.Cols : map.Rows;
         for(int i=0;i<list.Count-1;i++)
         {
             int currentReflection = -1;
@@ -88,8 +82,8 @@ public class Mirrors
             }
             catch (RepairedLineException ex)
             {
-                list[i] = ex.RepairedA;
-                throw new SmudgeException(list);
+                list[ex.LineIndex] = ex.RepairedA;
+                throw new SmudgeException(map);
             }
 
             if(currentReflection > currentReflectionSize)
@@ -116,7 +110,7 @@ public class Mirrors
             }
             else if (compared == 1 && !isClean)
             {
-                throw new RepairedLineException(repairedA);
+                throw new RepairedLineException(repairedA, a);
             }
             else
             {
@@ -186,18 +180,20 @@ public class Mirrors
     private class RepairedLineException : Exception
     {
         public string RepairedA { get; set; }
-        public RepairedLineException(string repairedLine) : base("REPAIRED")
+        public int LineIndex { get; set; }
+        public RepairedLineException(string repairedLine, int lineIndex) : base("REPAIRED")
         {
+            LineIndex = lineIndex;
             RepairedA = repairedLine;
         }
     }
 
     private class SmudgeException : Exception
     {
-        public List<string> RepairedLines { get; set; }
-        public SmudgeException(List<string> repairedLines) : base("REPAIRED")
+        public Map RepairedMap { get; set; }
+        public SmudgeException(Map repairedMap) : base("REPAIRED")
         {
-            RepairedLines = repairedLines;
+            RepairedMap = repairedMap;
         }
     }
 
