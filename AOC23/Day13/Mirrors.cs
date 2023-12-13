@@ -22,9 +22,14 @@ public class Mirrors
         var horInd = -1;
         var isClean = false;
 
+        var uncleanVerInd = -1;
+        var uncleanHorInd = -1;
 
         try
         {
+            uncleanVerInd = GetReflectionIndex(map, true);
+            uncleanHorInd = GetReflectionIndex(map, false);
+            
             verInd = GetReflectionIndex(map, true, isClean);
             horInd = GetReflectionIndex(map, false, isClean);
 
@@ -35,6 +40,15 @@ public class Mirrors
             verInd = GetReflectionIndex(ex.RepairedMap, true, isClean);
             horInd = GetReflectionIndex(ex.RepairedMap, false, isClean);
 
+            if (uncleanHorInd == horInd)
+            {
+                horInd = -1;
+            }
+
+            if (uncleanVerInd == verInd)
+            {
+                verInd = -1;
+            }
         }
 
         //verRowsLeft = Math.Abs(map.Cols.Count - (map.Cols.Count - verInd));
@@ -76,15 +90,15 @@ public class Mirrors
         for(int i=0;i<list.Count-1;i++)
         {
             int currentReflection = -1;
-            try
-            {
-                currentReflection = LengthOfReflection(list, i, isClean);
-            }
+            /*try
+            {*/
+                currentReflection = LengthOfReflection(map, useCols, i, isClean);
+            /*}
             catch (RepairedLineException ex)
             {
                 list[ex.LineIndex] = ex.RepairedA;
                 throw new SmudgeException(map);
-            }
+            }*/
 
             if(currentReflection > currentReflectionSize)
             {
@@ -96,21 +110,18 @@ public class Mirrors
         return reflectionStartAfterIndex;
     }
 
-    private int LengthOfReflection(List<string> list, int startAfterIndex, bool isClean = false)
+    private int LengthOfReflection(Map map, bool useCols, int startAfterIndex, bool isClean = false)
     {
         var a = startAfterIndex;
         var b = startAfterIndex + 1;
+        var list = useCols ? map.Cols : map.Rows;
         while (a >= 0 && b < list.Count)
         {
-            var compared = CompareLines(list[a], list[b], out var repairedA);
+            var compared = CompareLines(map, useCols, a, list[a], list[b], isClean);
             if (compared == 0)
             {
                 a--;
                 b++;
-            }
-            else if (compared == 1 && !isClean)
-            {
-                throw new RepairedLineException(repairedA, a);
             }
             else
             {
@@ -153,10 +164,12 @@ public class Mirrors
         }
     }
 
-    private int CompareLines(string a, string b, out string? repairedA)
+    private int CompareLines(Map map, bool useCols, int index, string a, string b, bool isClean)
     {
         var repairedAArr = a.ToCharArray();
-        repairedA = null;
+        int repairedAIndex = -1;
+        char repairedAChar = ' ';
+        string? repairedA = null;
         if (a == b)
         {
             return 0;
@@ -165,15 +178,31 @@ public class Mirrors
         var diffs = 0;
         for (int i = 0; i < a.Length; i++)
         {
-            if (a[i] != b[i])
-                diffs++;
-            if(diffs == 1)
+            if(diffs == 0)
             {
+                repairedAIndex = i;
+                repairedAChar = b[i];
                 repairedAArr[i] = b[i];
             }
+            if (a[i] != b[i])
+                diffs++;
+
         }
 
         repairedA = new string(repairedAArr);
+
+        if (diffs == 1 && !isClean)
+        {
+            var list = useCols ? map.Cols : map.Rows;
+            list[index] = repairedA;
+            var otherList = useCols ? map.Rows : map.Cols;
+            var repaired = otherList[repairedAIndex].ToCharArray();
+            repaired[index] = repairedAChar;
+            otherList[repairedAIndex] = new string(repaired);
+
+            throw new SmudgeException(map);
+        }
+        
         return diffs;
     }
 
