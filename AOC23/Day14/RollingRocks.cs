@@ -7,21 +7,38 @@ public class RollingRocks
     private readonly Grid _grid = new Grid();
     private const int CYCLES = 1000000000;
 
-    private string MatrixKey = "";
+    private Dictionary<string, int> KeysOfMultipleOfCycles = new Dictionary<string, int>();
     
     public long Calculate(string input)
     {
         ParseInput(input);
         for(int i =0;i < CYCLES; i++)
         {
-            var newKey = _grid.GetMatrixKey();
-            if (newKey == MatrixKey)
+            if (CYCLES % (i+1) == 0)
             {
-                break;
+                var newKey = _grid.GetMatrixKey();
+                if (KeysOfMultipleOfCycles.TryGetValue(newKey, out var lastMultiple))
+                {
+                    if ((i+1) %lastMultiple  == 0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        KeysOfMultipleOfCycles[newKey] = i + 1;
+                    }
+                }
+                else
+                {
+                    KeysOfMultipleOfCycles.Add(newKey, i+1);
+                }
             }
             CycleMatrix();
             Console.Write("\r{0:N2}%", (i / (double)CYCLES) * 100);
         }
+        Console.WriteLine();
+        Console.WriteLine();
+        
         _grid.PrintMatrix();
         long result = SumMatrix();
         return result;
