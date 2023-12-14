@@ -1,52 +1,74 @@
-﻿namespace AOC23.Day14;
+﻿using System.Text;
+
+namespace AOC23.Day14;
 
 public class RollingRocks
 {
     private readonly Grid _grid = new Grid();
-    private const int CYCLES = 1;
+    private const int CYCLES = 1000000000;
+
+    private string MatrixKey = "";
+    
     public long Calculate(string input)
     {
         ParseInput(input);
         for(int i =0;i < CYCLES; i++)
         {
-            //_grid.Transpose();
-            //RollRocksNorth();
-            RollRocks();
+            var newKey = _grid.GetMatrixKey();
+            if (newKey == MatrixKey)
+            {
+                break;
+            }
+            CycleMatrix();
+            Console.Write("\r{0:N2}%", (i / (double)CYCLES) * 100);
         }
+        _grid.PrintMatrix();
         long result = SumMatrix();
         return result;
+    }
+
+    private void CycleMatrix()
+    {
+        RollRocks();
+        _grid.RotateMatrixClockwise();
+        RollRocks();
+        _grid.RotateMatrixClockwise();
+        RollRocks();
+        _grid.RotateMatrixClockwise();
+        RollRocks();
+        _grid.RotateMatrixClockwise();
     }
 
     private void Cycle()
     {
         // North
-        _grid.Transpose();
-        _grid.PrintGrid();
+        _grid.TransposeRows();
+        _grid.PrintGridRows();
         RollRocksNorth();
-        _grid.PrintGrid();
+        _grid.PrintGridRows();
         
         // West
-        _grid.Transpose();
-        _grid.PrintGrid();
+        _grid.TransposeRows();
+        _grid.PrintGridRows();
         RollRocksNorth();
-        _grid.PrintGrid();
+        _grid.PrintGridRows();
         
         // South
-        _grid.Transpose();
-        _grid.PrintGrid();
+        _grid.TransposeRows();
+        _grid.PrintGridRows();
         RollRocksNorth();
-        _grid.PrintGrid();
+        _grid.PrintGridRows();
         
         // East
-        _grid.Transpose();
-        _grid.PrintGrid();
+        _grid.TransposeRows();
+        _grid.PrintGridRows();
         RollRocksNorth();
-        _grid.PrintGrid();
+        _grid.PrintGridRows();
     }
 
     private long SumLoad()
     {
-        _grid.PrintGrid();;
+        _grid.PrintGridRows();;
         long total = 0;
         foreach (var col in _grid.Rows)
         {
@@ -173,10 +195,53 @@ public class RollingRocks
 
     private class Grid
     {
+        public List<string> Rows { get; set; }
         public char[,] Matrix { get; set; }
-        public List<string> Rows { get; set; } = new List<string>();
 
-        public void PrintGrid()
+        // Rotate the Matrix 90 degrees clockwise
+        public void RotateMatrixClockwise()
+        {
+            // Rotate Matrix 90 degrees clockwise
+            var newMatrix = new char[Matrix.GetLength(1), Matrix.GetLength(0)];
+            for (var x = 0; x < Matrix.GetLength(0); x++)
+            {
+                for (var y = 0; y < Matrix.GetLength(1); y++)
+                {
+                    newMatrix[y, Matrix.GetLength(0) - x - 1] = Matrix[x, y];
+                }
+            }
+
+            Matrix = newMatrix;
+        }
+
+        public string GetMatrixKey()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int y = 0; y < Matrix.GetLength(0); y++)
+            {
+                for (int x = 0; x < Matrix.GetLength(1); x++)
+                {
+                    sb.Append(Matrix[y, x]);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        public void PrintMatrix()
+        {
+            for(int y = 0; y < Matrix.GetLength(0); y++)
+            {
+                for(int x = 0; x < Matrix.GetLength(1); x++)
+                {
+                    Console.Write(Matrix[y,x]);
+                }
+                Console.WriteLine();
+            }
+        }
+        
+        public void PrintGridRows()
         {
             foreach(var row in Rows)
             {
@@ -185,7 +250,7 @@ public class RollingRocks
             Console.WriteLine();
         }
         
-        public void Transpose()
+        public void TransposeRows()
         {
             var newList = new string[Rows.Count];
             for (var x = 0; x < Rows[0].Length; x++)
