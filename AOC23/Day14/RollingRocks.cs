@@ -7,35 +7,98 @@ public class RollingRocks
     private readonly Grid _grid = new Grid();
     private const int CYCLES = 1000000000;
 
-    private Dictionary<string, int> KeysOfMultipleOfCycles = new Dictionary<string, int>();
-    
+    //private Dictionary<string, int> KeysOfMultipleOfCycles = new Dictionary<string, int>();
+
+    private Dictionary<string, List<int>> RepeatCounts = new Dictionary<string, List<int>>();
     public long Calculate(string input)
     {
         ParseInput(input);
         for(int i =0;i < CYCLES; i++)
         {
-            if (CYCLES % (i+1) == 0)
+            
+            var newKey = _grid.GetMatrixKey();
+            if (RepeatCounts.TryGetValue(newKey, out var repeats))
             {
-                var newKey = _grid.GetMatrixKey();
-                if (KeysOfMultipleOfCycles.TryGetValue(newKey, out var lastMultiple))
+                repeats.Add(i);
+                if (repeats.Count > 2)
                 {
-                    break;
-                    if ((i+1) %lastMultiple  == 0)
+                    var diff = repeats[1] - repeats[0];
+                    bool allSame = true;
+                    for (var n = 2; n < repeats.Count; n++)
+                    {
+                        if(repeats[n] - repeats[n-1] != diff)
+                        {
+                            allSame = false;
+                        }
+                    }
+                    
+                    if(allSame)
+                    {
+                        var backTrackFrom1Bil = CYCLES % diff;
+                        //i = CYCLES - backTrackFrom1Bil;
+                        //continue;
+                    }
+                }
+            }
+            else
+            {
+                RepeatCounts.Add(newKey, new List<int> {i});
+            }
+            
+            
+            /*var newKey = _grid.GetMatrixKey();
+
+            if (RepeatCounts.TryGetValue(newKey, out var lastSeen))
+            {
+                lastSeen.Add(i+1);
+                if (CYCLES % (i + 1) == 0)
+                {
+                    var diff = lastSeen[1] - lastSeen[0];
+                    bool allSame = true;
+                    for (var n = 2; n < lastSeen.Count; n++)
+                    {
+                        if(lastSeen[n-1] - lastSeen[n] != diff)
+                        {
+                            allSame = false;
+                        }
+                    }
+                    
+                    if(allSame)
                     {
                         break;
                     }
-                    else
+                }
+               
+            }
+            else
+            {
+                RepeatCounts.Add(newKey, new List<int> {i+1});
+            }*/
+
+            if (SumMatrix() == 64 && (i+1) % 7 != 0)
+            {
+                Console.WriteLine("Iteration {0} results in 64", i);
+            }
+            /*
+            if (RepeatCounts.TryGetValue(newKey, out var count))
+            {
+                if (CYCLES % (i + 1) == 0 && count > 1)
+                {
+                    if (SumMatrix() == 64)
                     {
-                        KeysOfMultipleOfCycles[newKey] = i + 1;
+                        break;
                     }
                 }
-                else
-                {
-                    KeysOfMultipleOfCycles.Add(newKey, i+1);
-                }
+                RepeatCounts[newKey]++;
             }
+            else
+            {
+                RepeatCounts.Add(newKey, 1);
+            }*/
+
             CycleMatrix();
-            Console.Write("\r{0:N2}%", (i / (double)CYCLES) * 100);
+            
+            //Console.Write("\r{0:N2}%", (i / (double)CYCLES) * 100);
         }
         Console.WriteLine();
         Console.WriteLine();
