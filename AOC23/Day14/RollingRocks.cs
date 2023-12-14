@@ -19,6 +19,7 @@ public class RollingRocks
                 var newKey = _grid.GetMatrixKey();
                 if (KeysOfMultipleOfCycles.TryGetValue(newKey, out var lastMultiple))
                 {
+                    break;
                     if ((i+1) %lastMultiple  == 0)
                     {
                         break;
