@@ -9,10 +9,11 @@ public class RollingRocks
         ParseInput(input);
         for(int i =0;i < CYCLES; i++)
         {
-            _grid.Transpose();
-            RollRocksNorth();
+            //_grid.Transpose();
+            //RollRocksNorth();
+            RollRocks();
         }
-        long result = SumLoad();
+        long result = SumMatrix();
         return result;
     }
 
@@ -61,6 +62,56 @@ public class RollingRocks
         return total;
     }
     
+    private long SumMatrix()
+    {
+        long total = 0;
+        for(int y =0; y < _grid.Matrix.GetLength(0); y++)
+        {
+            for(int x =0; x < _grid.Matrix.GetLength(1); x++)
+            {
+                if(_grid.Matrix[y,x] == 'O')
+                {
+                    total += _grid.Matrix.GetLength(0) - y;
+                }
+            }
+        }
+
+        return total;
+    }
+
+    private void RollRocks()
+    {
+        for (int x = 0; x < _grid.Matrix.GetLength(0); x++)
+        {
+            var rollingBoulders = 0;
+            for (int y = _grid.Matrix.GetLength(1) -1; y >= 0 ; y--)
+            {
+                // If rolling boulder, remove and add to boulder list
+                if (_grid.Matrix[y,x] == 'O')
+                {
+                    rollingBoulders++;
+                    _grid.Matrix[y,x] = '.';
+                }
+                // If rock boulder, stack pending boulders behind it
+                if(_grid.Matrix[y,x] == '#')
+                {
+                    for(var n = y+rollingBoulders; n > y; n--)
+                    {
+                        _grid.Matrix[n, x] = 'O';
+                    }
+                    rollingBoulders = 0;
+                }
+                else if (y == 0) // Otherwise, check if we're at the end
+                {
+                    for(var n = 0; n < rollingBoulders; n++)
+                    {
+                        _grid.Matrix[n,x] = 'O';
+                    }
+                }
+            }
+        }
+    }
+    
     private void RollRocksNorth()
     {
         for (int x = 0; x < _grid.Rows.Count; x++)
@@ -107,10 +158,22 @@ public class RollingRocks
     {
         var lines = input.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
         _grid.Rows = lines;
+
+        _grid.Matrix = new char[lines.Count, lines[0].Length];
+
+        for (int y = 0; y < lines.Count; y++)
+        {
+            var line = lines[y].ToCharArray();
+            for (var x = 0; x < lines[0].Length; x++)
+            {
+                _grid.Matrix[y, x] = line[x];
+            }
+        }
     }
 
     private class Grid
     {
+        public char[,] Matrix { get; set; }
         public List<string> Rows { get; set; } = new List<string>();
 
         public void PrintGrid()
