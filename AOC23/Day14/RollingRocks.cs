@@ -9,7 +9,8 @@ public class RollingRocks
         ParseInput(input);
         for(int i =0;i < CYCLES; i++)
         {
-            Cycle();
+            _grid.Transpose();
+            RollRocksNorth();
         }
         long result = SumLoad();
         return result;
