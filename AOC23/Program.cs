@@ -7,6 +7,7 @@ using AOC23.Day11;
 using AOC23.Day12;
 using AOC23.Day13;
 using AOC23.Day14;
+using AOC23.Day15;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -86,6 +87,10 @@ if (int.TryParse(dayStr, out var day))
         case 14:
             var rocks = new RollingRocks();
             Console.WriteLine(rocks.Calculate(InputGrabber.GetInput()));
+            break;
+        case 15:
+            var hash = new HASH();
+            Console.WriteLine(hash.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
