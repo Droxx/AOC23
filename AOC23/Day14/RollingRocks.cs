@@ -5,7 +5,7 @@ namespace AOC23.Day14;
 public class RollingRocks
 {
     private readonly Grid _grid = new Grid();
-    private const int CYCLES = 1000000000;
+    private const int CYCLES = 1000;
 
     //private Dictionary<string, int> KeysOfMultipleOfCycles = new Dictionary<string, int>();
 
@@ -16,7 +16,7 @@ public class RollingRocks
         for(int i =0;i < CYCLES; i++)
         {
             
-            var newKey = _grid.GetMatrixKey();
+            /*var newKey = _grid.GetMatrixKey();
             if (RepeatCounts.TryGetValue(newKey, out var repeats))
             {
                 repeats.Add(i);
@@ -43,7 +43,7 @@ public class RollingRocks
             else
             {
                 RepeatCounts.Add(newKey, new List<int> {i});
-            }
+            }*/
             
             
             /*var newKey = _grid.GetMatrixKey();
