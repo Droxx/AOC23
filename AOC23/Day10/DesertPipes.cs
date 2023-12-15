@@ -53,9 +53,30 @@ public class DesertPipes
                 // Then we can increase an area count
 
                 var currentTile = _map.First(m => m.X == x && m.Y == y);
-                if (_visitedTiles.Contains(currentTile))
+                if (_visitedTiles.Any(v => v.X == currentTile.X && v.Y == currentTile.Y) && currentTile.Type != Tile.TileType.Start)
                 {
-                    // Change inside bool depending on rules
+                    switch (currentTile.Direction)
+                    {
+                        case Tile.PipeDirection.Vertical:
+                            inside = !inside;
+                            break;
+                        case Tile.PipeDirection.Horizontal:
+                            // Take no action, we're surfing a wall
+                            break;
+                        case Tile.PipeDirection.NEBend:
+                            inside = !inside;
+                            break;
+                        case Tile.PipeDirection.NWBend:
+                            inside = !inside;
+                            break;
+                        case Tile.PipeDirection.SEBend:
+                        case Tile.PipeDirection.SWBend:
+                            // Do nothing, passing the horizontal on these bends does not change ones state
+                            
+                            break;
+                        default:
+                             throw new Exception("oops");
+                    }
                 }
                 else
                 {
