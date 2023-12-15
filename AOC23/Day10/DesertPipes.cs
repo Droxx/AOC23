@@ -33,109 +33,45 @@ public class DesertPipes
             previousA = currentA;
             currentA = newA;
             
-            /*
-            if(AnyAdjacentVisitedBefore(currentA, previousA, out var adjacent))
-            {
-                var polygon = new List<Tile>();
-                for (int i = _visitedTiles.Count()-1; i >= _visitedTiles.IndexOf(adjacent); i--)
-                {
-                    polygon.Add(_visitedTiles.ElementAt(i));
-                }
-
-                var polyMaxX = polygon.Max(p => p.X);
-                var polyMinX = polygon.Min(p => p.X);
-                var polyMaxY = polygon.Max(p => p.Y);
-                var polyMinY = polygon.Min(p => p.Y);
-                
-                for (int y = polyMinY; y < polyMaxY; y++)
-                {
-                    for (int x = polyMinX; x < polyMaxX; x++)
-                    {
-                        var point = _map.FirstOrDefault(t => t.X == x && t.Y == y);
-                        if(!_visitedTiles.Contains(point) && !_encompassed.Contains(point) && IsInPolygon(_map.FirstOrDefault(t => t.X == x && t.Y == y), polygon.ToArray()))
-                        {
-                            _encompassed.Add(point);
-                        }
-                    }
-                }
-            }
-            */
             
             
             
             _visitedTiles.Add(currentA);
             
             Console.Write($"On step {steps} of ~14000\r");
-            // For two runners in oposite directions
-            //var newB = FollowPipe(currentB, previousB);
-            //previousB = currentB;
-            //currentB = newB;
-
-            // For debug printing
-            /*Console.WriteLine($"Step {steps}");
-            for (int y = startPosition.Y - 10; y < startPosition.Y + 10; y++)
-            {
-                for (int x = startPosition.X - 10; x < startPosition.X + 10; x++)
-                {
-                    if (currentA.X == x && currentA.Y == y)
-                    {
-                        Console.Write('X');
-                    }
-                    else if (currentB.X == x && currentB.Y == y)
-                    {
-                        Console.Write('X');
-                    }
-                    else
-                    {
-                        Console.Write(lines.ElementAt(y)[x]);
-                    }
-                }
-                Console.Write("\n\r");
-
-            }
-            Console.Write("\n\r");
-            Console.Write("\n\r");*/
+            
         } while (currentA != startPosition);
 
-        Console.Write("\n\r");
-        Console.Write("\n\r");
+        bool inside = false;
+        int areaCount = 0;
 
-        for (int y = 0; y < lines.Count(); y++)
+        for (var y = 0; y <= _map.Max(m => m.Y); y++)
         {
-            for (int x =  0; x < lines.ElementAt(y).Count(); x++)
+            for (var x = 0; x <= _map.Max(m => m.X); x++)
             {
-                if (_visitedTiles.Any(v => v.X == x && v.Y == y))
-                {
-                    Console.Write(lines.ElementAt(y)[x]);
+                // We can scan through each tile, and determine when we are inside, or outside the shape. When we are inside and we encounter a non-visited tile
+                // Then we can increase an area count
 
-                }
-                else if (_encompassed.Any(v => v.X == x && v.Y == y))
+                var currentTile = _map.First(m => m.X == x && m.Y == y);
+                if (_visitedTiles.Contains(currentTile))
                 {
-                    Console.Write('I');
+                    // Change inside bool depending on rules
                 }
                 else
                 {
-                    Console.Write(lines.ElementAt(y)[x]);
-
-                    //Console.Write('O');
+                    if (inside)
+                    {
+                        areaCount++;
+                    }
                 }
             }
-            Console.Write("\n\r");
         }
-_visitedTiles.Add(startPosition);
-        var area = Math.Abs(_visitedTiles.Take(_visitedTiles.Count - 1)
-            .Select((p, i) => (_visitedTiles[i + 1].X - p.X) * (_visitedTiles[i + 1].Y + p.Y))
-            .Sum() / 2);
+
+        Console.Write("\n\r");
+        Console.Write("\n\r");
+
         
-        /*foreach (var vi in _encompassed)
-        {
-            if (!_visitedTiles.Contains(vi))
-            {
-                area++;10
-            }
-        }*/
-        
-        return area;
+        return 1;
     }
 
     private bool AnyAdjacentVisitedBefore(Tile current, Tile previous, out Tile? adjacent)
