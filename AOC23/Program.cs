@@ -8,6 +8,7 @@ using AOC23.Day12;
 using AOC23.Day13;
 using AOC23.Day14;
 using AOC23.Day15;
+using AOC23.Day16;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -91,6 +92,10 @@ if (int.TryParse(dayStr, out var day))
         case 15:
             var hash = new HASH();
             Console.WriteLine(hash.Calculate(InputGrabber.GetInput()));
+            break;
+        case 16:
+            var beams = new Beams();
+            Console.WriteLine(beams.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
