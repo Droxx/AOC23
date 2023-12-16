@@ -9,12 +9,61 @@ public class Beams
     {
         ParseInput(input);
         
-        Energise(0,0,1,0);
+        //Energise(0,0,1,0);
 
         // Sum every record in _grid, 1 if energised, 0 if not
+        //return GetSum();
+        
+        FindBestDirection();
+        return _currentMax;
+    }
+
+    private int _currentMax = 0;
+    
+    private void FindBestDirection()
+    {
+        for(int y = 0; y < _grid.GetLength(0); y++)
+        {
+            Energise(0, y, 1, 0);
+            var sum = GetSum();
+            if (sum > _currentMax)
+            {
+                _currentMax = sum;
+            }
+            ResetGrid();
+            
+            Energise(_grid.GetLength(1)-1, y, -1, 0);
+            sum = GetSum();
+            if (sum > _currentMax)
+            {
+                _currentMax = sum;
+            }
+            ResetGrid();
+        }
+        
+        for(int x = 0; x < _grid.GetLength(1); x++)
+        {
+            Energise(x, 0, 0, 1);
+            var sum = GetSum();
+            if (sum > _currentMax)
+            {
+                _currentMax = sum;
+            }
+            ResetGrid();
+            
+            Energise(x, _grid.GetLength(0)-1, 0, -1);
+            sum = GetSum();
+            if (sum > _currentMax)
+            {
+                _currentMax = sum;
+            }
+            ResetGrid();
+        }
+    }
+
+    private int GetSum()
+    {
         var sum = 0;
-        Console.WriteLine();
-        PrintGrid(null, null);
         for (var y = 0; y < _grid.GetLength(0); y++)
         {
             for (var x = 0; x < _grid.GetLength(1); x++)
@@ -24,12 +73,20 @@ public class Beams
                     sum++;
                 }
             }
-
-            Console.WriteLine();
-
         }
 
         return sum;
+    }
+
+    private void ResetGrid()
+    {
+        for (var y = 0; y < _grid.GetLength(0); y++)
+        {
+            for (var x = 0; x < _grid.GetLength(1); x++)
+            {
+                _grid[y, x].Reset();
+            }
+        }
     }
 
     private void PrintGrid(int? startY, int? startX)
@@ -213,6 +270,15 @@ public class Beams
             {
                 EnergizedYUp = true;
             }
+        }
+
+        public void Reset()
+        {
+            IsEnergised = false;
+            EnergizedXLeft = false;
+            EnergizedXRight = false;
+            EnergizedYUp = false;
+            EnergizedYDown = false;
         }
 
         public enum TileType
