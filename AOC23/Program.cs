@@ -9,6 +9,7 @@ using AOC23.Day13;
 using AOC23.Day14;
 using AOC23.Day15;
 using AOC23.Day16;
+using AOC23.Day17;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -96,6 +97,10 @@ if (int.TryParse(dayStr, out var day))
         case 16:
             var beams = new Beams();
             Console.WriteLine(beams.Calculate(InputGrabber.GetInput()));
+            break;
+        case 17:
+            var heatLoss = new HeatLoss();
+            Console.WriteLine(heatLoss.Calculate(InputGrabber.GetInput()));
             break;
         default:
             Console.WriteLine("Day not implemented");
