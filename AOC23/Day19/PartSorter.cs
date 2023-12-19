@@ -11,7 +11,38 @@ public class PartSorter
     public long CalculatePart1(string input)
     {
         ParseInput(input);
-        return 5;
+
+        foreach (var part in _parts)
+        {
+            Result? result = null;
+            var currentRuleSet = "in";
+            do
+            {
+                var set = _sets[currentRuleSet];
+                foreach (var rule in set.Rules)
+                {
+                    result = rule.Function(part);
+                    if(result.NextRuleSet != null)
+                        currentRuleSet = result.NextRuleSet;
+                    if (result.Accepted != null || result.Rejected != null || result.NextRuleSet != null)
+                        break;
+                }
+                
+                if(result.Accepted  == null && result.Rejected == null && result.NextRuleSet == null)
+                    result = set.Final();
+                
+                if (result.NextRuleSet != null)
+                    currentRuleSet = result.NextRuleSet;
+
+                if (result.Accepted != null || result.Rejected != null)
+                {
+                    part.Accepted = result.Accepted == true;
+                    break;
+                }
+            } while (result.Accepted == null && result.Rejected == null);
+        }
+        
+        return _parts.Where(p => p.Accepted).Sum(p => p.X + p.M + p.A + p.S);
     }
 
     private void ParseInput(string input)
@@ -42,7 +73,8 @@ public class PartSorter
             
             ruleSet.Final = () => new Result
             {
-                Accepted = final == "A",
+                Accepted = final == "A" ? true : null,
+                Rejected = final == "R" ? true : null,
                 NextRuleSet = final != "A" && final != "R" ? final : null
             };
             
@@ -75,6 +107,8 @@ public class PartSorter
         public long M { get; set; }
         public long A { get; set; }
         public long S { get; set; }
+        
+        public bool Accepted { get; set; }
     }
 
     private class RuleSet
