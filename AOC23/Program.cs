@@ -11,6 +11,7 @@ using AOC23.Day15;
 using AOC23.Day16;
 using AOC23.Day17;
 using AOC23.Day18;
+using AOC23.Day19;
 using AOC23.Day2;
 using AOC23.Day3;
 using AOC23.Day4;
@@ -106,6 +107,10 @@ if (int.TryParse(dayStr, out var day))
         case 18:
             var quarry = new Quarry();
             Console.WriteLine(quarry.Part1(InputGrabber.GetInput()));
+            break;
+        case 19:
+            var sorter = new PartSorter();
+            Console.WriteLine(sorter.CalculatePart1(InputGrabber.GetInput("x")));
             break;
         default:
             Console.WriteLine("Day not implemented");
